@@ -1,0 +1,38 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load i18n %}
+{% block extra_style %}
+ <style type='text/css'>
+    #vncviewer { 
+      min-width: 799px; 
+      max-width: 799px;
+      min-height: 728px;
+      max-height: 728px;
+      border: 1px #fff solid;
+      background: #ccc;
+      text-align: center;
+      font-color: #f00;
+      margin:0 auto;
+    }
+  </style>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{% trans "Vm list" %}</li>
+{% endblock %}
+
+{% block body %}
+{% if vm.state == 1 %}
+  <div id="vncviewer">
+    <applet archive="/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="800">
+      <param name="SOCKETFACTORY" value="com.tightvnc.vncviewer.SshTunneledSocketFactory">
+      <param name="SSHHOST" value="{{ tunnel_host }}">
+      <param name="HOST" value="{{ host_ip }}">
+      <param name="PORT" value="{{ vnc_port }}">
+      Sorry, the VNC Applet could not be started. Please make sure that Java 1.4.2 (or later) is installed and active in your browser (<a href="http://java.sun.com/getjava">Click here to install Java now</a>)
+    </applet>
+  </div>
+{% else %}
+   <p>虚拟机没有启动</p>
+{% endif %}
+{% endblock %}

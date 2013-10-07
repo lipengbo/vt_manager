@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "slice.slice", "fields": {"name": "cjxslice", "date_expired": "2013-09-13T19:02:33Z", "project": 1, "state": 0, "owner": 1, "date_created": "2013-09-12T11:02:50.509Z", "description": "ok"}}]

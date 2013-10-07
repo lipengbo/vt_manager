@@ -1,0 +1,190 @@
+[
+    {
+        "pk": 1,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:24:36.051Z",
+            "disk_size": 32,
+            "name": "server1",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "11:11:11:11:11:11",
+            "state": 1,
+            "ip": "192.168.5.111",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:25:18.104Z",
+            "disk_size": 32,
+            "name": "srever2",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "12:12:12:12:12:12",
+            "state": 1,
+            "ip": "192.168.5.112",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:26:15.743Z",
+            "disk_size": 32,
+            "name": "srever3",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "03:03:03:03:03:03",
+            "state": 1,
+            "ip": "192.168.5.103",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 33,
+            "name": "ovs2",
+            "island": 1,
+            "dpid": "13:13:13:13:13:13:13:13",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.113",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 44,
+            "name": "ovs3",
+            "island": 1,
+            "dpid": "14:14:14:14:14:14:14:14",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.114",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 35,
+            "name": "ovs1",
+            "island": 1,
+            "dpid": "11:11:11:11:11:11:11:11",
+            "has_gre_tunnel": true,
+            "ip": "192.168.5.111",
+            "password": "cjx",
+            "port": 34
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 34,
+            "name": "ovs4",
+            "island": 1,
+            "dpid": "12:12:12:12:12:12:12:12",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.112",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 3,
+            "name": "p1",
+            "port": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 3,
+            "name": "p2",
+            "port": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 1,
+            "name": "p3",
+            "port": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 1,
+            "name": "p4",
+            "port": 2
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 2,
+            "name": "p5",
+            "port": 1
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 4,
+            "name": "p6",
+            "port": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.virtualswitch",
+        "fields": {
+            "server": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.virtualswitch",
+        "fields": {
+            "server": 2
+        }
+    }
+]

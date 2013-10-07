@@ -1,0 +1,465 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span>创建Slice{% endblock %}
+
+{% block body %}
+        <div class="fill_form form-wizard">
+            <ul class="row-fluid nav nav-pills">                
+                <li class="span1"></li>
+                <li class="span2 visit">
+                    <a href="#tab1" class="step">
+                    <span class="number">1</span>
+                    <span class="desc active">基本信息</span>   
+                    </a>
+                </li>
+                <li class="span2">
+                    <a href="#tab2" class="step">
+                    <span class="number">2</span>
+                    <span class="desc">网络配置</span>   
+                    </a>
+                </li>
+                <li class="span2">
+                    <a href="#tab3" class="step">
+                    <span class="number">3</span>
+                    <span class="desc">服务配置</span>   
+                    </a>
+                </li>
+                <li class="span2">
+                    <a href="#tab4" class="step">
+                    <span class="number">4</span>
+                    <span class="desc">虚拟机创建</span>   
+                    </a> 
+                </li>
+                <li class="span2">
+                    <a href="#tab4" class="step">
+                    <span class="number">5</span>
+                    <span class="desc">Slice清单</span>   
+                    </a> 
+                </li>
+                <li class="span1"></li>
+            </ul>
+          <form>
+            <div class="tab_part">
+              <fieldset>
+                <legend>基本信息</legend>
+                <label>名称</label>
+                <input type="text">
+                <label>描述</label>
+                <textarea rows="8"></textarea>  
+                <label>选择节点</label>
+                <select>
+                  <option>无线谷</option>
+                  <option>北邮</option>
+                  <option>翠屏</option>
+                </select>            
+              </fieldset>
+               <div class="form-actions">
+                  <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block">返 回</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"></div>
+                  </div>
+              </div>
+             </div>
+             <div class="tab_part">
+             <fieldset>
+                <legend>Slice网络节点选择</legend>
+                <div class="alert alert-info">
+                  <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
+                </div>
+                <div class="show_frame">
+                  <div class="frame_tip">
+                    <span class="label label-important">网络出口节点</span>
+                    <span class="label label-info">普通交换节点</span>
+                    <span class="label label-success">虚拟机关联节点</span>
+                  </div>
+                  <div class="main_frame"></div>
+                  <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>DPID</th>
+                            <th>网络节点类型</th>
+                            <th>端口</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A</td>
+                            <td>00:00:00:00:00:00:01</td>
+                            <td>网络出口节点</td>
+                            <td>A-1<------->B-1，A-2<--------->C-1</td>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>00:00:00:00:00:00:01</td>
+                            <td>网络出口节点</td>
+                            <td>A-1<------->B-1，A-2<--------->C-1</td>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>00:00:00:00:00:00:01</td>
+                            <td>网络出口节点</td>
+                            <td>A-1<------->B-1，A-2<--------->C-1</td>
+                        </tr>
+                    </tbody>
+                  </table>              
+                </div>       
+              </fieldset>
+              <fieldset>
+                 <legend>Slice网络地址</legend>
+                 <label>IP数量</label>
+                <select>
+                  <option>4</option>
+                  <option>8</option>
+                  <option>16</option>
+                  <option>32</option>
+                  <option>64</option>
+                </select>   
+                <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
+              </fieldset>
+              <div class="form-actions">
+                  <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"></div>
+                  </div>
+              </div>
+             </div>  
+             
+             <div class="tab_part">
+                 <fieldset class="base_info">
+                <legend>Slice网络地址</legend>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="71">网络地址：</td>
+                            <td>192.168.10.0/28</td>
+                            <td><span class="help-inline">网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>Slice控制器配置</legend>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="180">
+                                <label class="radio tab_radio1">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                                                                                                         创建控制器
+                                </label>
+                            </td>
+                            <td width="70">控制器类型</td>
+                            <td width="290">
+                                <select>
+                                  <option>floodlight</option>
+                                  <option>pox</option>
+                                  <option>nox</option>
+                                </select>
+                            </td>
+                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="radio tab_radio2">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                                                                                                         自定义控制器
+                                </label>
+                            </td>
+                            <td>控制器IP</td> 
+                            <td>
+                                <input type="text" disabled>
+                            </td>
+                            <td width="70">控制器端口</td>
+                            <td>
+                                <input type="text" disabled>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>虚拟网关配置</legend>
+                 <div class="alert alert-info">
+                     <strong>提示：</strong> 可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分
+                 </div>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="70">网关宿主机</td>
+                            <td>
+                                <select>
+                                  <option>floodlight</option>
+                                  <option>pox</option>
+                                  <option>nox</option>
+                                </select>
+                            </td>
+                            <td><span class="help-inline">用户根据选取的虚拟机关联节点选取虚拟网关部署位置</span></td>
+                        </tr>
+                        <tr>
+                            <td>网关IP地址</td>
+                            <td><input type="text" /></td>
+                            <td><span class="help-inline">用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+              </fieldset>
+              <label class="checkbox inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1" class="tab_checkbox"> 是否配置DHCP服务器 
+              </label>
+              <fieldset class="base_info hide_form">
+                 <legend>DHCP服务器配置</legend>
+                 <div class="alert alert-info">
+                     <strong>提示：</strong> 可选
+                 </div>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio3">
+                                  <input type="radio" name="controller_type" id="optionsRadios3" value="default_create">
+                                  默认DHCP服务
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio4">
+                                  <input type="radio" name="controller_type" id="optionsRadios4" value="default_create" checked>
+                                  自定义DHCP服务
+                                </label>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>DHCP地址池<td>
+                            <td>开始</td>
+                            <td>
+                                <input type="text" class="input-small">
+                            </td>
+                            <td>结束</td>
+                            <td>
+                                <input type="text" class="input-small">
+                            </td>
+                            <td><span class="help-inline">用户为DHCP分配地址池，地址池必须包含在第2步获取的网络段内部</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+              </fieldset>
+              
+              <div class="form-actions">
+                  <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"></div>
+                  </div>
+              </div>
+             </div>     
+             <div class="tab_part">
+                 <fieldset class="base_info vm_info_list">
+                 <legend>虚拟机信息</legend>
+                 <div class="sec_block">
+                  <table class="table">             
+                    <tbody>
+                        <tr>
+                            <td width="100">名称</td>
+                            <td>
+                                <input type="text" value="">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>模板类型</td>
+                            <td>
+                                <select>
+                                  <option>类型1</option>
+                                  <option>类型2</option>
+                                  <option>类型3</option>
+                                </select>
+                            </td>
+                            <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                        </tr>
+                        <tr>
+                            <td>镜像类型</td>
+                            <td>
+                                <select>
+                                  <option>类型1</option>
+                                  <option>类型2</option>
+                                  <option>类型3</option>
+                                </select>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>关联网络节点</td>
+                            <td>
+                                <select>
+                                  <option>节点1</option>
+                                  <option>节点2</option>
+                                  <option>节点3</option>
+                                </select>
+                            </td>
+                            <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
+                        </tr>
+                    </tbody>
+                 </table>
+                 <label class="checkbox">
+                    <input type="checkbox" value="" checked>
+                                                                      是否启动DHCP
+                 </label>
+                 <div class="operate_btn">
+                    <button class="btn btn-inverse del" type="button">删 除</button>
+                 </div>
+                </div>          
+              </fieldset>  
+              <p class="add_btn"><button class="btn btn-primary add" type="button">继续添加</button></p>                        
+              <div class="form-actions">
+                  <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"></div>
+                  </div>
+              </div>
+             </div>
+             <div class="tab_part">
+                 <fieldset>
+                 <legend>Slice网络节点</legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>DPID</th>
+                            <th>节点类型</th>
+                            <th>所选端口</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>00000000001</td>
+                            <td>虚拟机关联节点</td>
+                            <td>1.2.4</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>00000000002</td>
+                            <td>网络出口节点</td>
+                            <td>1.2</td>
+                        </tr>
+                    </tbody>
+                 </table>   
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>Slice网络地址</legend>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="70">网络地址：</td>
+                            <td>192.168.5.0/24</td>
+                        </tr>
+                    </tbody>
+                 </table>   
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>Slice控制器</legend>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="100">控制器IP端口：</td>
+                            <td>192.168.5.122:6633</td>
+                        </tr>
+                        <tr>
+                            <td width="100">控制器类型：</td>
+                            <td>floodlight</td>
+                        </tr>                       
+                    </tbody>
+                 </table>   
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>Slice虚拟网关</legend>
+                 <div class="alert alert-info">
+                     <strong>提示：</strong> 可选
+                 </div>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="110">虚拟网关IP地址：</td>
+                            <td>192.168.5.1</td>
+                        </tr>                       
+                    </tbody>
+                 </table>   
+              </fieldset>
+              <fieldset class="base_info">
+                 <legend>Slice DHCP服务器</legend>
+                 <div class="alert alert-info">
+                     <strong>提示：</strong> 可选
+                 </div>
+                 <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="140">DHCP所在网络节点：</td>
+                            <td>192.168.20.5</td>
+                        </tr>
+                        <tr>
+                            <td width="140">DHCP地址范围：</td>
+                            <td>192.168.5.2~192.168.5.100</td>
+                        </tr>                       
+                    </tbody>
+                 </table>   
+              </fieldset>
+              <fieldset>
+                 <legend>Slice虚拟机列表</legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>模板类型</th>
+                            <th>镜像类型</th>
+                            <th>关联网络节点</th>
+                            <th>是否启动DHCP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VM1</td>
+                            <td>small</td>
+                            <td>ubuntu</td>
+                            <td>DPID</td>
+                            <td>是</td>
+                        </tr>
+                        <tr>
+                            <td>VM2</td>
+                            <td>small</td>
+                            <td>ubuntu</td>
+                            <td>DPID</td>
+                            <td>否</td>
+                        </tr>
+                    </tbody>
+                 </table>   
+              </fieldset>
+              
+              <div class="form-actions">
+                  <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
+                    <div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">生成Slice</button></div>
+                    <div class="span3"></div>
+                  </div>
+              </div>
+             </div>
+           </form>
+        </div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+{% endblock %}

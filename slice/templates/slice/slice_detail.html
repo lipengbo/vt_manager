@@ -1,0 +1,227 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}
+	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
+	<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>
+	Slice详情
+{% endblock %}
+
+{% block body %}
+		<div class="fill_form form-wizard">
+			  <fieldset class="base_info">
+			    <legend>基本信息
+			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编 辑</a>
+			    </legend>
+			    <table class="table">
+			    	<tbody>
+			    		<tr>
+			    			<td width="50">名称：</td>
+			    			<td>{{slice_obj.name}}</td>
+			    		</tr>
+			    		<tr>
+			    			<td class="v_top">描述：</td>
+			    			<td>{{slice_obj.description}}</td>
+			    		</tr>
+			    		<tr>
+			    			<td valign="top">节点：</td>
+			    			<td>{{island.name}}</td>
+			    		</tr>
+			    	</tbody>
+			    </table>			     
+			  </fieldset>
+			  <fieldset class="base_info">
+			  	 <legend>Slice资源</legend>
+			  	 <table class="table">
+				 	<tbody>
+				 		<tr>
+				 			<td width="20%">控制器</td>
+				 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
+				 			<td width="25%">
+				 				<button type="button" class="btn btn-success start_btn">启动</button>
+					 			<button type="button" class="btn btn-info">登录</button>
+				 			{% if slice_obj.state == 0 %}
+					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
+					 		{%else%}	
+					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info" disabled>编辑</a>
+					 		{%endif%}
+				 			</td>
+				 		</tr>
+				 		{%for gw in gws%}
+					 		<tr>
+					 			<td>虚拟网关</td>
+					 			<td>IP：{{gw.ip}}</td>
+					 			<td>
+					 				<button type="button" class="btn btn-success start_btn">启动</button>
+						 			<button type="button" class="btn btn-info">登录</button>
+						 		{% if slice_obj.state == 0 %}
+						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
+						 		{%else%}
+						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
+						 		{%endif%}
+					 			</td>
+					 		</tr>
+				 		{%endfor%}
+				 		{%for dhcp in dhcps%}
+					 		<tr>
+					 			<td>DHCP服务器</td>
+					 			<td>IP：{{dhcp.ip}}</td>
+					 			<td>
+					 				<button type="button" class="btn btn-success start_btn">启动</button>
+						 			<button type="button" class="btn btn-info">登录</button>
+						 		{% if slice_obj.state == 0 %}
+						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
+						 		{%else%}
+						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
+						 		{%endif%}
+					 			</td>
+					 		</tr>
+					 	{%endfor%}
+				 	</tbody>
+				 </table>
+				 <table class="table">
+				 	<tbody>
+				 		{%for vm in vms%}
+					 		<tr>
+					 			<td width="20%">{{vm.name}}</td>
+					 			<td width="25%">IP：{{vm.ip}}</td>
+					 			<td width="30%">所属网络节点：{{vm.server.ip}}</td>
+					 			<td width="25%">
+			    {% if vm.state == 1 %}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
+			    {%else%}
+			        <button type="button" onclick="do_vm_action('{% url 'do_vm_action' vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+			        <button type="button" onclick="" class="btn" disabled>登录</button>
+			    {%endif%}
+  			    <button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-delete">删除</button>
+					 			</td>
+					 		</tr>
+				 		{%endfor%}
+				 	</tbody>
+				 </table>	
+				<button type="button" onclick="window.location.href='{% url 'vm_list' slice_obj.id %}'" class="btn btn-info edit">&gt;&gt;更多</button>
+			  </fieldset>
+			  <fieldset>
+			  	 <legend>Slice拓扑</legend>
+					<div id="content" style="background-color:#FFFFFF; width:100%; height:300px">
+					</div>
+					<div class="clear" style="display: none" >
+						<p id="slice_id">{{slice_obj.id}}</p>
+						<p id="topology_type">1</p>
+						<p id="STATIC_URL">{{STATIC_URL}}</p>
+					</div>
+			  </fieldset>
+			  <div class="form-actions">
+    			  <div class="row-fluid">
+    			  	<div class="span4"></div>
+    			  	<div class="span4">
+    			  	{% if slice_obj.state == 0 %}
+    			  		<button type="button" class="btn btn-large btn-block btn-success start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
+    			  			启动Slice
+    			  		</button>
+    			  	{%else%}
+    			  		<button type="button" class="btn btn-large btn-block btn-danger start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'">
+    			  			停止Slice
+    			  		</button>
+    			  	{%endif%}
+    			  	</div>
+    			  	<div class="span4"></div>
+    			  </div>
+			  </div>			 
+		</div>
+		<div id="editInfoModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3>Slice基本信息编辑</h3>      
+            </div>
+            <form class="" action="/slice/edit_description/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_description('slice_description',1)">{% csrf_token %}
+            	<div class="modal-body">
+                  <table class="table">
+                      <tbody>
+                          <tr>
+                              <td width="150" class="text_r">名称</td>
+                              <td>{{slice_obj.name}}</td>
+                          </tr>
+                          <tr>
+                              <td class="v_top text_r">描述</td>
+                              <td>
+                              		<textarea rows="3" name="slice_description" id="slice_description">{{slice_obj.description}}</textarea>
+                              		<span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+	            </div>
+	            <div class="modal-footer">
+	              <button class="btn" data-dismiss="modal">取消</button>
+	              <button  class="btn btn-primary" type="submit">确定</button>
+	            </div>
+          </form>
+         </div>
+         <div id="editSliceModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3>SLICE控制器编辑</h3>      
+            </div>
+            <form class="" action="/slice/edit_controller/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_controller('controller_type')">{% csrf_token %}
+            	<div class="modal-body tooltip-demo">
+                  <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="130">
+                                <label class="radio tab_radio1">
+                                  <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
+                                  {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
+                                  默认创建
+                                </label>
+                            </td>
+                            <td width="85">控制器类型</td>
+                            <td>
+                                <select name="controller_sys" id="controller_sys">
+                                  <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
+                                  <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
+                                  <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
+                                </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="radio tab_radio2">
+                                  <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined"
+                                  {%if controller.name == "user_define"%}checked{%else%}{%endif%}>
+                                  自定义
+                                </label>
+                            </td>
+                            <td>控制器IP端口</td> 
+                            <td>
+                            {%if controller.name == "user_define"%}
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" value={{controller.ip}}:{{controller.port}} onblur="check_slice_controller('controller_type')">
+                            {%else%}
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                            {%endif%}
+                            	<span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+	          </div>
+	          <div class="modal-footer">
+	              <button class="btn btn-info" data-dismiss="modal">取消</button>
+	              <button class="btn btn-info" type="submit">确定</button>
+	          </div>
+            </form>
+         </div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
+<script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
+{% endblock %}

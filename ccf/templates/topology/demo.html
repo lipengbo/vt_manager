@@ -1,0 +1,213 @@
+{% extends 'site_base.html' %}
+
+{% block extra_style %}
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css" media="screen">
+        .nav {
+            background-image:none;
+            height:auto;
+        }
+        .topo-box {
+            position: relative;
+        }
+        .island-title {
+            display:inline-block;
+            padding:0;
+            margin:0;
+        }
+        .caption:hover {
+            font-size: 20px;
+        }
+        .caption {
+            font-size: 20px;
+        }
+        .link {
+          stroke: #000;
+          stroke-width: 1.5px;
+        }
+
+        .node {
+          fill: #000;
+          stroke: #fff;
+          stroke-width: 1.5px;
+        }
+        .label, .slice-name {
+            line-height:24px;
+        }
+
+        .node { fill: #1f77b4; }
+        .ode2 { fill: #ff7f0e; }
+        .ode3 { fill: #2ca02c; }
+
+        .island-node {
+            width:80px;
+            height:80px;
+            position: absolute;
+            cursor: pointer;
+        }
+        .island-node0 {
+            left: 310px;
+            top: 170px;
+        }
+        .island-node1 {
+            left: 144px;
+            top: 188px;
+        }
+        .body {
+            overflow:none;
+        }
+        .island-node2 {
+            left: 50px;
+            top: 259px;
+        }
+        .island-node3 {
+            left: 410px;
+            top: 162px;
+        }
+        .island-node4 {
+            left: 510px;
+            top:240px;
+        }
+        .island-node5 {
+            left: 612px;
+            top: 214px;
+        }
+        .iframe {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .form-actions {
+            margin:0;
+        }
+        .topo-img, .topology {
+            border:none;
+            opacity: 0.8;
+            width: 100%;
+            height: 100%;
+            background: white;
+        }
+        .topo-img {
+            display:none;
+        }
+        .nav-tabs {
+            margin-top:50px;
+        }
+        .nav-tabs li {
+        }
+        .nav-tabs li.slice-menu a {
+            font-size:20px;
+        }
+        .nav-tabs li a {
+            padding:10px 10px;
+        }
+        .nav-tabs li.selected a {
+            background: #428bca;
+            color:white;
+        }
+        .nav-tabs li.head a {
+            padding:0 0 0 10px;
+            color:#333;
+            font-weight:bold;
+        }
+        .nav-tabs li.head .column{
+            border-right:1px solid #CCC;
+            padding-top:5px;
+        }
+        #island-img {
+            margin: 0 auto;
+            margin-top:180px;
+            width: 690px;
+            background: url("/static/topology/img/slice-hl-0.png") no-repeat;
+            background-size: 690px;
+            height:1200px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="row-fluid">
+    <div class="span9 topo-box">
+        <div id="island-img">
+        </div>
+        <div class="hide" id="city-topo">
+        </div>
+        <div class="iframe hide">
+            <div class="form-actions">
+                <h3 class="island-title muted"></h3>
+                <button class="btn pull-right btn-danger close-button">X</button>
+            </div>
+            <div class="topo-img">
+                <img src="" id="topo-img" />
+            </div>
+            <iframe class="topology"></iframe>
+        </div>
+    </div>
+    <div class="span3">
+        <ul class="nav nav-tabs nav-stacked">
+            <li class="island-button" data-id="0">
+                <a href="#" class="caption" data-title="全网网络拓扑">虚网列表</a>
+            </li>
+            <li class="head" data-id="0">
+                <a href="#">
+                    <div class="row-fluid">
+                        <div class="span8 column">
+                            虚网描述
+                        </div>
+                        <div class="span4 column">
+                            状态
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% for slice in slices %}
+            <li class="island-button slice-menu" data-id="{{ slice.id }}" data-title="{{ slice.name }} 虚网网络拓扑" data-islands="{% for island in slice.islands %}{{ island }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                <a href="javascript:;" data-id="{{ slice.id }}">
+                    <div class="row-fluid">
+                        <div class="span8 slice-name">
+                            {{ slice.name }} 
+                        </div>
+                        <div class="span2">
+                            <span class="label label-success status">激活</span>
+                        </div>
+                        <div class="span6 hide">
+                        <button class="btn hide btn-{% if slice.status == 'up' %}danger{% else %}success{% endif %} action pull-right" data-toggle="button" data-id="{{ slice.id }}">
+                        {% if  slice.status == 'up' %}停止{% else %}启动{% endif %}
+                        </button>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="/static/topology/lib/d3.v2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var islands = $.parseJSON('{{ islands_json|safe }}');
+        var slices = $.parseJSON('{{ slices_json|safe }}');
+        $(".action").button();
+        $(".action").click(function(){
+            if($(this).hasClass('btn-success')) {
+                $.get('/cache_status/' + $(this).data('id') + '/', {status:'up'})
+                $(this).removeClass('btn-success').addClass('btn-danger');
+                $(this).text('停止');
+                $(this).parent().prev().find('span').addClass('label-success').text('激活');
+            } else if ($(this).hasClass('btn-danger')) {
+                $.get('/cache_status/' + $(this).data('id') + '/', {status:'down'})
+                $(this).removeClass('btn-info').addClass('btn-success');
+                $(this).text('启动');
+                $(this).parent().prev().find('span').removeClass('label-success').text('未激活');
+            }
+        });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}topology/js/demo.js" charset="utf-8">
+    </script>
+{% endblock %}

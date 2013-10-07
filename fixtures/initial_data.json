@@ -1,0 +1,94 @@
+[
+    {
+        "fields": {
+            "domain": "localhost:8000", 
+            "name": "example.com [localhost]"
+        }, 
+        "model": "sites.site", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "domain": "example.com", 
+            "name": "example.com"
+        }, 
+        "model": "sites.site", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "netaddr": "10.0.0.0/8", 
+            "type": 1
+        }, 
+        "model": "ipam.network", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "netaddr": "172.16.0.100/16", 
+            "type": 0
+        }, 
+        "model": "ipam.network", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "cpu": 1, 
+            "hdd": 10, 
+            "name": "micro", 
+            "ram": 256
+        }, 
+        "model": "vt.flavor", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "cpu": 1, 
+            "hdd": 20, 
+            "name": "mini", 
+            "ram": 512
+        }, 
+        "model": "vt.flavor", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "cpu": 2, 
+            "hdd": 40, 
+            "name": "small", 
+            "ram": 1024
+        }, 
+        "model": "vt.flavor", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "cpu": 2, 
+            "hdd": 80, 
+            "name": "medium", 
+            "ram": 2048
+        }, 
+        "model": "vt.flavor", 
+        "pk": 4
+    }, 
+    {
+        "fields": {
+            "cpu": 4, 
+            "hdd": 160, 
+            "name": "large", 
+            "ram": 4096
+        }, 
+        "model": "vt.flavor", 
+        "pk": 5
+    }, 
+    {
+        "fields": {
+            "cpu": 6, 
+            "hdd": 320, 
+            "name": "xlarge", 
+            "ram": 8192
+        }, 
+        "model": "vt.flavor", 
+        "pk": 6
+    }
+]

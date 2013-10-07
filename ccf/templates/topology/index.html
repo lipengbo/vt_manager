@@ -1,0 +1,303 @@
+{% extends "site_base.html" %}
+{% block head_title_base %}
+    未来网络实验设施控制框架
+{% endblock %}
+{% block body_class %}
+{% if no_parent %}
+{% else %}
+common
+{% endif %}
+{% endblock %}
+{% block extra_style %}
+    <link href="{{ STATIC_URL }}topology/css/topology.css?v=1" rel="stylesheet">
+    <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui.css" rel="Stylesheet" />
+    {% if no_parent %}
+        <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="Stylesheet" />
+    {% endif %}
+    <style type="text/css" media="">
+        {% if no_parent %}
+            .navbar {
+                display: none;
+            }
+            #footer{
+                display: none;
+            }
+            .breadcrumb {
+                display: none;
+            }
+            .body {
+                margin-left:0;
+                border-top:none !important;
+            }
+        {% endif %}
+    </style>
+{% endblock %}
+{% block body %}
+<div class="header"></div>
+
+<div id="svg" class="">
+{% if not no_parent %}
+<hr class="sep">
+{% endif %}
+<div class="row-fluid">
+    <div class="span12">
+        {% if not no_parent %}
+        
+        <div class="hero-unit">
+                <div class="tempStats">
+                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(103, 194, 239);">{{ total_nodes }}</div>
+                        <span>城市节点</span>
+                    </div>
+                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(250, 96, 61);">{{ total_island }}</div>
+                        <span>实验节点</span>
+                    </div>
+                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(203, 233, 104);">{{ total_server }}</div>
+                        <span>服务器</span>
+                    </div>
+                    <div class="tempStatBox span2 noMargin" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(255, 84, 84);">{{ total_switch }}</div>
+                        <span>交换机</span>
+                    </div>
+                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(234, 232, 116);">{{ total_ctrl }}</div>
+                        <span>控制器</span>
+                    </div>
+                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                        <div class="tempStat" style="border-color: rgb(250, 187, 61);">{{ total_facility }}</div>
+                        <span>其他设备</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+        <div class="hide row-fluid">
+            <div class="span12 well well-small">
+                {% include "topology/_city_filter.html" %}
+                <div class="span2">
+                    <label class="inline checkbox">
+                        <input type="checkbox" name="quanwang" id="quanwang" value="1" checked />显示服务器
+                    </label>
+                </div>
+                <div class="span2">
+                    <label class="inline checkbox">
+                        <input type="checkbox" name="" id="show-logical" value="1" />显示逻辑拓扑
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            {% if not hide_filter %}
+                <div class="span2">
+                    <label class="inline checkbox">
+                        <input type="checkbox" name="quanwang" id="quanwang" value="1" checked />显示服务器
+                    </label>
+                </div>
+            {% endif %}
+            <input type="hidden" name="quanwang" id="quanwang" value="1" />
+            <input type="hidden" name="" id="show-logical" value="1" {% if show_virtual_switch %}checked{% endif %}/>
+        {% endif %}
+    </div>
+</div>
+<div id="content">
+    {% if not no_parent %}
+        <div class="well well-small">
+            <center>
+                <h3>未来网络实验设施全网视图</h3>
+            </center>
+        </div>
+    {% endif %}
+    <div class="" id="topology-svg">
+        {% if svg and no_parent %}
+        {{ svg|safe }}
+        {% endif %}
+    </div>
+    {% if not no_parent %}
+    <div class="slices">
+        <table class="table table-bordered">
+                <tr>
+                  <th >slice名称</th>
+                  <th >描述信息</th>
+                  <th >创建时间</th>
+                  <th >过期时间</th>
+                  <th >状态</th>
+                  <th >拥有者</th>
+                  <th >操作</th>
+                </tr>
+              {% for slice in slices %}
+                <tr>
+                    <td  class="operation"><a href='{% if slice.url %}{{slice.url}}{% else %}{% url detail_slice slice.id 2 %}{% endif %}' target="_blank">{{slice.name}}</a></td>
+                  <td>{{slice.description}}</td>
+                  <td>{{slice.create_date|date:"Y-m-d h:i:s"}}</td>
+                  <td>{{slice.expiration_date|date:"Y-m-d h:i:s"}}</td>
+                  <td>
+                      {%if slice.is_started == 0%}
+                      <span class="label">停止</span>
+                    {%else%}
+                    <span class="label label-success">启动</span>
+                    {%endif%}
+                  </td>
+                  <td>{{slice.owner_name}}</td>
+                  <td  class ="operation">
+                      <a href="{%url detail_slice slice.id 1%}">
+                          <i class="icon-pencil"></i>
+                          编辑</a>
+                      <a href="{%url slice_delete slice.id slice.project_id 2%}?redirect=/" class="del_slice" >
+                          <i class="icon-remove"></i>
+                          删除</a>
+                  </td>
+                </tr>
+               {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+         <div id="del-confirm" style="display:none" title="提示">
+	<p>确定要删除该项目吗？</p>
+  </div>
+{% block topology_content %}
+
+{% endblock %}
+</div>
+
+    <div class="port-modal modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>选择端口</h3>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a>
+        <a href="#" class="btn btn-primary confirm-port" data-dismiss="modal" aria-hidden="true">确定</a>
+      </div>
+    </div>
+</div> <!-- /container -->
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" charset="utf-8">
+    var controller_host = "{{ host }}";
+    var gre_ovses = [{% for ovs in all_gre_ovs %}
+    '{{ ovs.dpid }}'{% if not forloop.last%},{% endif %}
+    {% endfor %}];
+
+</script>
+<script src="{{ STATIC_URL }}topology/lib/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}topology/lib/underscore-min.js"></script>
+<script src="{{ STATIC_URL }}topology/lib/backbone-min.js"></script>
+<script src="{{ STATIC_URL }}topology/lib/d3.v2.min.js"></script>
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+
+<script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
+
+<script src="{{ STATIC_URL }}topology/js/utils.js"></script>
+
+<script src="{{ STATIC_URL }}topology/js/models/hostmodel.js"></script>
+<script src="{{ STATIC_URL }}topology/js/models/topologymodel.js"></script>
+<script src="{{ STATIC_URL }}topology/js/models/statusmodel.js"></script>
+<script src="{{ STATIC_URL }}topology/js/models/switchmodel.js"></script>
+<script src="{{ STATIC_URL }}topology/js/models/portmodel.js"></script>
+<script src="{{ STATIC_URL }}topology/js/models/flowmodel.js"></script>
+
+<script src="{{ STATIC_URL }}topology/js/views/header.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/home.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/status.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/host.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/switch.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/topology.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/port.js"></script>
+<script src="{{ STATIC_URL }}topology/js/views/flow.js"></script>
+<script src="{{ STATIC_URL }}js/spin.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+    var no_parent = {% if no_parent %}true;{% else %}false;
+    {% endif %}
+</script>
+<script src="{{ STATIC_URL }}topology/js/main.js?v=5"></script>
+<script type="text/javascript" charset="utf-8">
+
+var opts = {
+  lines: 13, // The number of lines to draw
+  length: 20, // The length of each line
+  width: 10, // The line thickness
+  radius: 30, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#000', // #rgb or #rrggbb
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: 'auto', // Top position relative to parent in px
+  left: 'auto' // Left position relative to parent in px
+};
+var spinner = new Spinner(opts);
+var target = document.getElementById('content');
+var direct_flowvisor_api = {% if not no_parent %}true{% else %}false{% endif %};
+{% if not no_parent or not svg %}
+    var islands = [];
+        
+    var root_controllers = $.parseJSON('{{root_controllers|safe}}');
+
+    load_topology(function(){$(document).ready(function () {
+            app = new AppRouter();
+            Backbone.history.start({pushState: true});
+            var redraw = function () {
+                for (var i = 0; i < islands.length; i++) {
+                    var island = islands[i];
+                    if(island.topology_view) {
+                        island.topology_view.render();
+                    }
+                };
+            }
+            $('#quanwang').click(redraw);
+            $('#show-logical').click(redraw);
+            $.each(root_controllers, function(index, controller){
+                var island = new Island("/" + controller.host, controller.id);
+                island.fetch();
+                islands.push(island);
+            });
+            if(islands.length > 0){
+                spinner.spin(target)
+            }
+        });
+    });
+     $(".del_slice").click(function(){
+         var del_project=this;
+        $( "#del-confirm" ).dialog({
+                    resizable: false,
+                    height:140,
+                    modal: true,
+                    buttons: {
+                    "取 消": function() {
+                        $( this ).dialog( "close" );
+                    },
+                    "确 定": function() {
+                        $( this ).dialog( "close" );
+                        window.location.href=$( del_project ).attr('href');
+                    }
+                }
+            });
+        return false;
+     });
+{% endif %}
+    $('.island-select').change(function(){
+        var island_id = $(this).val();
+        if (island_id) {
+            window.location.href = "/topology/?island_id=" + island_id + "&city_id=" + $('#city').val();
+        }
+    });
+    $('#city').change(function(){
+        var city_id = $(this).val();
+        if(city_id == '0')  {
+            window.location.href = "/topology/"
+        }
+        $('.island-select').hide();
+        $('#island-select' + city_id).show().trigger('change');
+    });
+</script>
+{% endblock %}

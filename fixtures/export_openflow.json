@@ -1,0 +1,72 @@
+[
+    {
+        "pk": 1,
+        "model": "openflow.controller",
+        "fields": {
+            "username": "root",
+            "http_port": 8080,
+            "name": "controller1",
+            "slices": [],
+            "island": 1,
+            "object_id": null,
+            "is_root": false,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.168.5.103",
+            "password": "cdn%nf",
+            "port": 6633
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.flowvisor",
+        "fields": {
+            "username": "root",
+            "http_port": 8181,
+            "name": "flowvisor1",
+            "slices": [],
+            "island": 1,
+            "object_id": null,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.168.5.103",
+            "password": "123",
+            "port": 6634
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 1,
+            "target": 3
+        }
+    },
+    {
+        "pk": 2,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 2,
+            "target": 5
+        }
+    },
+    {
+        "pk": 3,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 4,
+            "target": 6
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.flowvisorlinksmd5",
+        "fields": {
+            "flowvisor": 1,
+            "md5": "d751713988987e9331980363e24189ce"
+        }
+    }
+]

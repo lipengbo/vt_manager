@@ -1,0 +1,102 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "help" %}{% endblock %}
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/own-flatui.css" %}" />       
+{% endblock %}
+{% block body_class %}login_bg{% endblock %}
+{% block topbar_base %}{% endblock %}
+{% block breadcrumb_base %}{% endblock %}
+
+{% block body %}
+    	<div class="login_logo">
+    		<img src="{% static "img/logo.png" %}" />
+    	</div>
+    	<div class="login_title">
+    		<img src="{% static "img/title2.png" %}" />
+    	</div>
+    	<div class="login-form">
+    		<div class="row-fluid">
+    			<div class="span4">   	
+    			  <div class="control-group">		
+    				<input type="text" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
+    				<label class="login-field-icon fui-user" for="login-name"></label>
+    			  </div>				  
+    			</div>
+    			<div class="span4">
+    			  <div class="control-group">	
+    				<input type="password" class="login-field" value="" placeholder="请输入密码" id="login-pass">
+    				<label class="login-field-icon fui-lock" for="login-name"></label>
+    			  </div>
+    			</div>
+    			<div class="span2">
+    				<a href="#" class="btn btn-large btn-block btn-info">登 录</a>
+    			</div>
+    			<div class="span2">
+    				<a data-toggle="modal" href="#myModal" class="btn btn-large btn-block btn-info" id="register">注册</a>
+    			</div>
+    		</div>
+    	</div>
+        <div id="myModal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>注册</h3>
+            </div>
+            <div class="modal-body">
+            	<form class="form-horizontal pop_form">
+				  <fieldset>
+				    <div class="control-group success">
+				      <label class="control-label" for="input01">用户名</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" placeholder="字母，数字，汉字皆可"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group error">
+				      <label class="control-label" for="input01">密码</label>
+				      <div class="controls">
+				        <input type="password" class="input-xlarge" id="input01" placeholder="字母，数字、特殊符号皆可"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">确认密码</label>
+				      <div class="controls">
+				        <input type="password" class="input-xlarge" id="input01" placeholder="请再次确认密码"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">邮箱</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" placeholder="请输入常用邮箱"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">所属单位</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" placeholder="请输入您所在单位"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">固定电话</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" placeholder="请输入您的固定电话">
+				      </div>
+				    </div>
+				  </fieldset>
+				</form>
+            </div>
+            <div class="modal-footer">
+              <a href="#" class="btn btn-info btn_register">注册</a>
+            </div>
+          </div>
+          
+{% endblock %}
+
+{% block footer_base %}{% endblock %}
+
+{% block extra_script %}
+{% endblock %}
+          

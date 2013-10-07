@@ -1,0 +1,62 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+{% endblock %}
+{% block breadcrumb_base %}{% endblock %}
+{% block body_class %}common help_box{% endblock %}
+
+{% block body %}
+	<div class="row-fluid help_all">
+       <div class="span9">
+       	 <div class="help_main_wrap">
+       	 	<div class="help_main">
+       	 	  <section id="ceni">
+       	 		<h4>What is GENI?</h4>
+       	 		<p>GENI (Global Environment for Network Innovations) provides a virtual laboratory for networking and distributed systems research and education. It is well suited for exploring networks at scale, thereby promoting innovations in network science, security, services and applications. GENI allows experimenters to:</p>
+                <ol>
+                	<li>Obtain compute resources from locations around the United States;</li>
+                	<li>Obtain compute resources from locations around the United States;</li>
+                	<li>Obtain compute resources from locations around the United States;</li>
+                </ol>         	 	
+                <img src="{% static "img/001.png" %}" />
+              </section>
+              <section id="project">
+                <h4>About project</h4>
+                <p>A project organizes research in GENI, containing both people and their experiments. A project is created and led by a single responsible individual: the Project Lead. A project may have many experimenters as its members and an experimenter may be a member of many projects. The Project Lead is ultimately accountable for all actions by project members in the context of the project. GENI experimenters must have Project Lead privileges to create projects. Only faculty and senior members of an organization can be project leads (e.g. students cannot be project leads).</p>
+                <img src="{% static "img/ProjectGraphic-2.png" %}" />
+              </section>
+              <section id="slice">
+                <h4>What is slice?</h4>
+                <p>A project organizes research in GENI, containing both people and their experiments. A project is created and led by a single responsible individual: the Project Lead. A project may have many experimenters as its members and an experimenter may be a member of many projects. The Project Lead is ultimately accountable for all actions by project members in the context of the project. GENI experimenters must have Project Lead privileges to create projects. Only faculty and senior members of an organization can be project leads (e.g. students cannot be project leads).</p>
+                <img src="{% static "img/hactar_slices.png" %}" />
+              </section>
+       	 	</div>
+       	 </div>
+       </div>	
+       <div class="span3 help_chose">
+       	 <div class="help_main_wrap">
+          <ul class="nav nav-list bs-docs-sidenav">
+	          <li><a href="#ceni"><i class="icon-chevron-left"></i> What is GENI?</a></li>
+	          <li><a href="#project"><i class="icon-chevron-left"></i> About project</a></li>
+	          <li><a href="#slice"><i class="icon-chevron-left"></i> What is slice?</a></li>
+	       </ul>	
+	     </div>
+       </div>
+     </div>
+{% endblock %}
+
+{% block extra_script %}
+	   <script src="{{ STATIC_URL}}js/jquery.pin.js"></script>
+	   <script type="text/javascript">
+		$(function() {
+			$(".help_chose").pin()
+		});
+	</script>
+	<script src="{{ STATIC_URL}}js/own.js"></script>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span><a href="#">创建Slice</a><span class="divider">/</span><a href="#">Slice详情</a><span class="divider">/</span>虚拟机列表{% endblock %}
+
+{% block body %}
+        <div class="fill_form">
+            <fieldset>
+                 <legend>虚拟机<button type="button" class="btn edit">返 回</button><button type="button" class="btn btn-primary edit">添 加</button></legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="20%">名称</th>
+                            <th width="25%">IP</th>
+                            <th width="25%">所属网络节点</th>
+                            <th width="30%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>VM1</td>
+                            <td>192.168.5.125</td>
+                            <td>192.168.20.6</td>
+                            <td><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+                        </tr>
+                    </tbody>
+                 </table>
+              </fieldset>
+        </div>
+{% endblock %}
+{% block extra_script %}
+<script src="/site_media/static/js/own.js"></script>
+{% endblock %}

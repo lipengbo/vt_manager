@@ -1,0 +1,75 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span>创建Slice{% endblock %}
+
+{% block body %}
+	<div class="help_doc">
+		<div class="help_main fill_form form-wizard">
+			<ul class="row-fluid nav nav-pills">
+				<li class="span1"></li>
+				<li class="span2 active">
+					<a href="#tab1" class="step">
+					<span class="number">1</span>
+					<span class="desc">基本信息</span>   
+					</a>
+				</li>
+				<li class="span2">
+					<a href="#tab2" class="step">
+					<span class="number">2</span>
+					<span class="desc">网络配置</span>   
+					</a>
+				</li>
+				<li class="span2">
+					<a href="#tab3" class="step">
+					<span class="number">3</span>
+					<span class="desc">服务配置</span>   
+					</a>
+				</li>
+				<li class="span2">
+					<a href="#tab4" class="step">
+					<span class="number">4</span>
+					<span class="desc">虚拟机创建</span>   
+					</a> 
+				</li>
+				<li class="span2">
+					<a href="#tab4" class="step">
+					<span class="number">5</span>
+					<span class="desc">服务清单</span>   
+					</a> 
+				</li>
+				<li class="span1"></li>
+			</ul>
+		  <form>
+			  <fieldset>
+			    <legend>基本信息</legend>
+			    <label>名称</label>
+			    <input type="text">
+			    <label>描述</label>
+			    <textarea rows="8"></textarea>		     
+			  </fieldset>
+			  <fieldset>
+			  	 <legend>Slice节点 </legend>
+			  	 <label>选择节点</label>
+			    <select>
+				  <option>无线谷</option>
+				  <option>北邮</option>
+				  <option>翠屏</option>
+				</select>	
+			  </fieldset>
+			  <div class="row-fluid">
+			  	<div class="span3"></div>
+			  	<div class="span3"><button type="submit" class="btn btn-large btn-block">返 回</button></div>
+			  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">下一步</button></div>
+			  	<div class="span3"></div>
+			  </div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block extra_script %}
+{% endblock %}

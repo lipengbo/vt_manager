@@ -1,0 +1,129 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+{% load invite_tags %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}项目申请{% endblock %}
+
+{% block body %}
+        <div class="fill_form">
+            <div class="search">
+                <div class="form-horizontal search_chose">
+                    <label class="control-label">项目类别：</label>                   
+                    <select name="category" id="category-filter">
+                      <option value="-1">全部</option>
+                      {% for category in categories %}
+                      <option {% if category == current_cat %}selected{% endif %} value="{{ category.id }}">{{ category }}</option>
+                      {% endfor %}
+                    </select>
+                </div>
+                <form class="form-search">
+                  <div class="input-append">
+                      <input type="text" name="query" value="{{ query }}" class="span2 search-query">
+                    <button type="submit" class="btn">搜索</button>
+                  </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+          <form action="" method="POST" class="base_info">
+              {% csrf_token %}
+            <fieldset>
+                 <legend>项目列表<a data-toggle="modal" href="#applyModal" class="btn btn-info edit">申请加入</a></legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%"  class="checkall"><input type="checkbox"></th>
+                            <th width="20%">项目名称</th>
+                            <th width="40%">简介</th>
+                            <th width="15%">拥有者</th>
+                            <th width="10%">类型</th>
+                            <th width="10%">申请状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                        <tr>
+                            {% with project|application_status:user as status %}
+                            <td><input type="checkbox" name="project_id" {% if status.accepted or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.description }}</td>
+                            <td>{{ project.owner }}</td>
+                            <td>{{ project.category }}</td>
+                            <td>
+                                {% if status.is_apply %}
+                                    {% if status.accepted %}
+                                    <span class="text-success">已接受</span>
+                                    {% else %}
+                                    <span class="text-error">未审批</span>
+                                    {% endif %}
+                                {% else %}
+                                    未申请
+                                {% endif %}
+                            </td>
+                            {% endwith %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                 </table>
+              </fieldset>
+        <div class="pagination">
+          <ul>
+            <li class="disabled"><a href="#">Prev</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </div>   
+        <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3 id="myModalLabel">申请</h3>      
+            </div>
+                <div class="modal-body">
+                      <table class="table">
+                          <tbody>
+                              <tr>
+                                  <td width="150" class="v_top text_r">申请理由</td>
+                                  <td><textarea rows="3" name="message"></textarea></td>
+                              </tr>
+                              <tr>
+                                  <td class="text_r">申请角色</td>
+                                  <td>
+                                      <select>
+                                          <option>学生</option>
+                                          <option>学者</option>
+                                          <option>工作人员</option>
+                                          <option>自由职业者</option>
+                                          <option>教授</option>
+                                        </select>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-info" data-dismiss="modal">取消</button>
+                  <button type="submit" class="btn btn-info">提交申请</button>
+                </div>
+         </div>
+  </form>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('#category-filter').change(function(){
+        if($(this).val() != '-1') {
+            window.location.href = '?category=' + $(this).val();
+        } else {
+            window.location.href= "?"
+        }
+    });
+</script>
+{% endblock %}

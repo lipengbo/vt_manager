@@ -1,0 +1,49 @@
+[
+    {
+        "pk": 1,
+        "model": "project.city",
+        "fields": {
+            "name": "\u5357\u4eac",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.island",
+        "fields": {
+            "city": 1,
+            "name": "\u672a\u6765\u7f51\u7edc",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.category",
+        "fields": {
+            "name": "sdn"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.project",
+        "fields": {
+            "owner": 1,
+            "category": 1,
+            "islands": [
+                1
+            ],
+            "name": "unittestproject",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.membership",
+        "fields": {
+            "project": 1,
+            "is_owner": true,
+            "user": 1,
+            "date_joined": "2013-09-23T06:22:56.819Z"
+        }
+    }
+]

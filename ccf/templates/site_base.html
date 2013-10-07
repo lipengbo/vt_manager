@@ -1,0 +1,112 @@
+{% extends "theme_base.html" %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% load metron_tags %}
+{% load i18n %}
+
+       {% block style_base %}
+            <link href="{% static "css/square/blue.css" %}" rel="stylesheet">
+            <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
+            <link href="{% static "css/own.css" %}" rel="stylesheet">
+            {% block extra_style %}{% endblock %}
+        {% endblock %}
+        
+		{% block extra_head_base %}
+		    {% block extra_head %}{% endblock %}
+		{% endblock %}
+	    {% block body_class %}common{% endblock %}
+		{% block topbar_base %}
+                <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse">
+                    <div class="navbar-inner">
+                        <div class="container">
+                            {% block topbar %}
+                                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </a>
+                                {% block site_brand %}{% endblock %}
+                                <div class="nav-collapse collapse">
+                                    {% block nav %}
+                                    	<ul class="nav">
+					                      <li class="active"><a href="/">首页</a></li>
+					                      <li><a href="#">项目</a></li>
+					                      <li><a href="#">消息日志</a></li>
+					                      <li><a href="#">权限</a></li>
+					                      <li><a href="#">帮助</a></li>
+					                    </ul>
+                                        {% comment %}
+                                            <ul class="nav">
+                                                <li><a href="#tab_one">One</a></li>
+                                                <li><a href="#tab_two">Two</a></li>
+                                            </ul>
+                                        {% endcomment %}
+                                    {% endblock %}
+                                    {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+		{% block body_base %}
+		    <div class="container">	        
+		    	{% block breadcrumb_base %}
+		        <ul class="breadcrumb">
+		            <li><span class="icon-home"></span><a href="{% url "project_index" %}">{% trans "Project" %}</a><span class="divider">/</span>
+		            {% block breadcrumb %}
+		            {% endblock %}
+		            </li>
+		        </ul>
+		        {% endblock %}
+		        {% include "_messages.html" %}
+		        
+		        
+		         <div class="main_wrap">	
+		           <div class="main">	             		        
+    		        {% block body %}
+    		        {% endblock %}	
+    		       </div>                
+		        </div>
+	        
+		    </div>
+		{% endblock %}
+		
+		{% block script_base %}
+            <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
+            <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+            <script src="{% static "pinax/js/theme.js" %}"></script>
+            <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+            <script>
+                $(document).ready(function(){
+                    $('input').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+                    $('.btn-delete').click(function(){
+                         var result = confirm("你确定要删除?");
+                         if (result) {
+                            return true;
+                         } else {
+                            return false;
+                         }
+                    });
+                });
+            </script>
+            {% block extra_script %}{% endblock %}
+        {% endblock %}
+		
+{% block extra_body_base %}
+    {% analytics %}
+    {% block extra_body %}
+    	{% block footer_base %}
+            <footer>
+                {% block footer %}
+                    {% include "_footer.html" %}
+                {% endblock %}
+            </footer>
+        {% endblock %}
+    {% endblock %}
+{% endblock %}

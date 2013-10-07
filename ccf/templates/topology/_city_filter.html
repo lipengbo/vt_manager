@@ -1,0 +1,24 @@
+<div class="span3">
+    
+<select id="city" class="">
+    <option value="0">全网</option>
+{% for node_info in node_infos %}
+<option value="{{node_info.node.id}}" {% if city_id == node_info.node.id %} selected{% endif %}>{{ node_info.node.cityname }}</option>
+{% endfor %}
+</select>
+</div>
+<div class="span3">
+{% for node_info in node_infos %}
+    
+<select id="island-select{{ node_info.node.id }}" class="island-select  
+    {% if city_id %}
+        {% if city_id == node_info.node.id %}{% else %}hide{% endif %}
+    {% else %}
+        hide
+    {% endif %}">
+        {% for island in node_info.islands %}
+        <option value="{{ island.island.id }}" {% if island_id == island.island.id %}selected{% endif %}>{{ island.island.islandname }}</option>
+        {% endfor %}
+</select>
+{% endfor %}
+</div>

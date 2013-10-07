@@ -1,0 +1,177 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span>项目详情{% endblock %}
+
+{% block body %}
+		<div class="fill_form">
+			  <fieldset class="base_info">
+			    <legend>基本信息<button type="button" class="btn btn-primary edit">编 辑</button></legend>
+			    <table class="table">
+			    	<tbody>
+			    		<tr>
+			    			<td width="71">名称：</td>
+			    			<td>slice1</td>
+			    		</tr>
+			    		<tr>
+			    			<td class="v_top">描述：</td>
+			    			<td>相信很多前端编程爱好者么都知道，对于一个文本域而言，有时候textarea的控制是非常费脑经的。其中最为难办的一点也许就是怎么控制textarea元素的不可拖动性质。相信很多前端编程爱好者么都知道，对于一个文本域而言，有时候textarea的控制是非常费脑经的。其中最为难办的一点也许就是怎么控制textarea元素的不可拖动性质。</td>
+			    		</tr>
+			    		<tr>
+			    			<td valign="top">所属节点：</td>
+			    			<td>无线谷</td>
+			    		</tr>
+			    	</tbody>
+			    </table>			     
+			  </fieldset>
+			  <fieldset>
+			  	 <legend>成员<button type="button" class="btn btn-primary edit">邀请成员</button><button type="button" class="btn btn-primary edit">查看待审批</button></legend>
+			  	 <table class="table table-striped table-hover">
+				 	<thead>
+				 		<tr>
+				 			<th width="25%">序号</th>
+				 			<th width="25%">用户名</th>
+				 			<th width="25%">所属单位</th>
+				 			<th width="25%">操作</th>
+				 		</tr>
+				 	</thead>
+				 	<tbody>
+				 		<tr>
+				 			<td>1</td>
+				 			<td>ceni1</td>
+				 			<td>无线谷</td>
+				 			<td><button type="button" class="btn btn-inverse">移除</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td>2</td>
+				 			<td>ceni1</td>
+				 			<td>无线谷</td>
+				 			<td><button type="button" class="btn btn-inverse">移除</button></td>
+				 		</tr>
+				 	</tbody>
+				 </table>
+			  </fieldset>
+			  <div class="row-fluid">
+			  	<div class="span4"></div>
+			  	<div class="span4"><button type="submit" class="btn btn-large btn-block btn-info">创建Slice</button></div>
+			  	<div class="span4"></div>
+			  </div>
+			  <fieldset>
+			  	 <legend>Slice<button type="button" class="btn btn-link edit">更多>></button></legend>
+			  	 <div class="row-fluid">
+			  	     <ul class="example-sites row-fluid">
+                        <li class="span3">
+                          <a class="close" data-dismiss="modal">×</a>
+                          <a class="thumbnail" href="http://www.baidu.com/" target="_blank">
+                            <img src="{% static "img/001.png" %}" />
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td width="100">Slice名称：</td>
+                                        <td>slice1</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点个数：</td>
+                                        <td>3个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">虚拟机个数：</td>
+                                        <td>2个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点：</td>
+                                        <td>xxxxxxxxxxx</td>
+                                    </tr>
+                                </tbody>
+                            </table>            
+                          </a>
+                        </li>
+                        <li class="span3">
+                          <a class="close" data-dismiss="modal">×</a>
+                          <a class="thumbnail" href="http://soundready.fm/" target="_blank">
+                            <img src="{% static "img/001.png" %}" />
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td width="100">Slice名称：</td>
+                                        <td>slice1</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点个数：</td>
+                                        <td>3个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">虚拟机个数：</td>
+                                        <td>2个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点：</td>
+                                        <td>xxxxxxxxxxx</td>
+                                    </tr>
+                                </tbody>
+                            </table>            
+                          </a>
+                        </li>
+                        <li class="span3">
+                          <a class="close" data-dismiss="modal">×</a>
+                          <a class="thumbnail" href="http://www.baidu.com/" target="_blank">
+                            <img src="{% static "img/001.png" %}" />
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td width="100">Slice名称：</td>
+                                        <td>slice1</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点个数：</td>
+                                        <td>3个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">虚拟机个数：</td>
+                                        <td>2个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点：</td>
+                                        <td>xxxxxxxxxxx</td>
+                                    </tr>
+                                </tbody>
+                            </table>            
+                          </a>
+                        </li>
+                        <li class="span3">
+                          <a class="close" data-dismiss="modal">×</a>
+                          <a class="thumbnail" href="http://soundready.fm/" target="_blank">
+                            <img src="{% static "img/001.png" %}" />
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td width="100">Slice名称：</td>
+                                        <td>slice1</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点个数：</td>
+                                        <td>3个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">虚拟机个数：</td>
+                                        <td>2个</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">网络节点：</td>
+                                        <td>xxxxxxxxxxx</td>
+                                    </tr>
+                                </tbody>
+                            </table>            
+                          </a>
+                        </li>
+                      </ul>
+			  	 </div>
+			  </fieldset>
+		</div>
+{% endblock %}
+{% block extra_script %}
+{% endblock %}

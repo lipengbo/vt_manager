@@ -1,0 +1,166 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}项目申请{% endblock %}
+
+{% block body %}
+        <div class="fill_form">
+            <div class="search">
+                <div class="form-horizontal search_chose">
+                    <label class="control-label">项目类别：</label>                   
+                    <select>
+                      <option>全部</option>
+                      <option>SDN</option>
+                      <option>CCN</option>
+                      <option>云计算</option>
+                      <option>其他</option>
+                    </select>                 
+                </div>                                                        
+                <form class="form-search">
+                  <div class="input-append">
+                    <input type="text" class="span2 search-query">
+                    <button type="submit" class="btn">搜索</button>
+                  </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+            <fieldset>
+                 <legend>项目列表<a data-toggle="modal" href="#applyModal" class="btn btn-primary edit">申请加入</a></legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="checkall"><input type="checkbox"></th>
+                            <th width="20%">项目名称</th>
+                            <th width="40%">简介</th>
+                            <th width="15%">拥有者</th>
+                            <th width="10%">类型</th>
+                            <th width="10%">申请状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td>未申请</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td class="font_wait">待审批</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td>未申请</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td class="font_wait">待审批</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td>未申请</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td class="font_wait">待审批</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td>未申请</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="c"></td>
+                            <td>项目1</td>
+                            <td>简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</td>
+                            <td>admin</td>
+                            <td>SDN</td>
+                            <td class="font_wait">待审批</td>
+                        </tr>
+                    </tbody>
+                 </table>
+              </fieldset>
+        </div>
+        <div class="pagination">
+          <ul>
+            <li class="disabled"><a href="#">Prev</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </div>   
+        <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3 id="myModalLabel">申请</h3>      
+            </div>
+            <div class="modal-body">
+              <form class="base_info">
+                  <table class="table">
+                      <tbody>
+                          <tr>
+                              <td width="150" class="v_top text_r">申请理由</td>
+                              <td><textarea rows="3"></textarea></td>
+                          </tr>
+                          <tr>
+                              <td class="text_r">申请角色</td>
+                              <td>
+                                  <select>
+                                      <option>学生</option>
+                                      <option>学者</option>
+                                      <option>工作人员</option>
+                                      <option>自由职业者</option>
+                                      <option>教授</option>
+                                    </select>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal">取消</button>
+              <button class="btn btn-primary">提交申请</button>
+            </div>           
+         </div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script>  
+        $(document).ready(function() {
+});
+</script> 
+<script src="{{ STATIC_URL}}js/own.js"></script>
+{% endblock %}

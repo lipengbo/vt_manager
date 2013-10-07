@@ -1,0 +1,418 @@
+[
+    {
+        "pk": 19,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "category",
+            "name": "Category",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "city",
+            "name": "City",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "island",
+            "name": "Island",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "membership",
+            "name": "Membership",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "project",
+            "name": "Project",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "account",
+            "name": "account",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "accountdeletion",
+            "name": "account deletion",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "contenttype",
+            "name": "content type",
+            "app_label": "contenttypes"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "controller",
+            "name": "controller",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "emailaddress",
+            "name": "email address",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "emailconfirmation",
+            "name": "email confirmation",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flavor",
+            "name": "flavor",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowspacerule",
+            "name": "flow space rule",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowvisor",
+            "name": "flowvisor",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowvisorlinksmd5",
+            "name": "flowvisor links md5",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "gateway",
+            "name": "gateway",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "group",
+            "name": "group",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "hostmac",
+            "name": "host mac",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "image",
+            "name": "image",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "invitation",
+            "name": "invitation",
+            "app_label": "invite"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "ipusage",
+            "name": "ip usage",
+            "app_label": "ipam"
+        }
+    },
+    {
+        "pk": 38,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "link",
+            "name": "link",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "log",
+            "name": "log",
+            "app_label": "eventlog"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "logentry",
+            "name": "log entry",
+            "app_label": "admin"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "network",
+            "name": "network",
+            "app_label": "ipam"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "permission",
+            "name": "permission",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "server",
+            "name": "server",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "session",
+            "name": "session",
+            "app_label": "sessions"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "signupcode",
+            "name": "signup code",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "signupcoderesult",
+            "name": "signup code result",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "site",
+            "name": "site",
+            "app_label": "sites"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "slice",
+            "name": "slice",
+            "app_label": "slice"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceisland",
+            "name": "slice island",
+            "app_label": "slice"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceport",
+            "name": "slice port",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceswitch",
+            "name": "slice switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "subnet",
+            "name": "subnet",
+            "app_label": "ipam"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "switch",
+            "name": "switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "switchport",
+            "name": "switch port",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "user",
+            "name": "user",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "virtualmachine",
+            "name": "virtual machine",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "virtualswitch",
+            "name": "virtual switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "fields": {
+            "description": "\u5357\u4eac", 
+            "name": "\u5357\u4eac"
+        }, 
+        "model": "project.city", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "city": 1, 
+            "description": "\u65e0\u7ebf\u8c37", 
+            "name": "\u65e0\u7ebf\u8c37"
+        }, 
+        "model": "project.island", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "name": "sdn"
+        }, 
+        "model": "project.category", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "category": 1, 
+            "description": "ok", 
+            "islands": [
+                1
+            ], 
+            "name": "unittestproject", 
+            "owner": 1
+        }, 
+        "model": "project.project", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "date_joined": "2013-09-23T06:22:56.819Z", 
+            "is_owner": true, 
+            "project": 1, 
+            "user": 1
+        }, 
+        "model": "project.membership", 
+        "pk": 1
+    }
+]

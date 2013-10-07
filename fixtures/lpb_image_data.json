@@ -1,0 +1,46 @@
+[
+    {
+        "pk": 1,
+        "model": "vt.image",
+        "fields": {
+            "url": "http://192.168.5.107:9292/v1/image/7fc070b8-88a5-47ba-9ef0-d98dba9edad5",
+            "version": null,
+            "type": null,
+            "uuid": "7fc070b8-88a5-47ba-9ef0-d98dba9edad5",
+            "name": "windowsxp"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "vt.image",
+        "fields": {
+            "url": "http://192.168.5.107:9292/v1/image/a09273ab-382a-4622-b18c-705fda77bdcc",
+            "version": null,
+            "type": null,
+            "uuid": "a09273ab-382a-4622-b18c-705fda77bdcc",
+            "name": "15g_img"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "vt.image",
+        "fields": {
+            "url": "http://192.168.5.107:9292/v1/image/53807c3b-8d25-4d4f-9249-a798ce0b7013",
+            "version": null,
+            "type": null,
+            "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7013",
+            "name": "9m_img"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "vt.image",
+        "fields": {
+            "url": "http://192.168.5.107:9292/v1/image/53807c3b-8d25-4d4f-9249-a798ce0b7014",
+            "version": null,
+            "type": null,
+            "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7014",
+            "name": "floodlight"
+        }
+    }
+]

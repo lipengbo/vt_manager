@@ -1,0 +1,76 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+<li class="active">{% trans "create vm" %}</li>
+{% endblock %}
+{% block body %}
+<form class="form-wizard" action="" method="post" accept-charset="utf-8">
+    <fieldset class="base_info vm_info_list">
+    <legend>虚拟机信息</legend>
+    <div class="sec_block">
+    {% csrf_token %}
+    <table class="table">             
+        <tbody>
+            <tr>
+                <td width="100">名称</td>
+                <td>
+                    <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
+                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>模板类型</td>
+                <td>
+                    {{ vm_form.flavor }} {{vm_form.flavor.errors}}
+                    <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+                </td>
+                <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+            </tr>
+            <tr>
+                <td>镜像类型</td>
+                <td>
+                    {{ vm_form.image }} {{vm_form.image.errors}}
+                    <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>关联网络节点</td>
+                <td>
+                    {{ vm_form.server }} {{vm_form.server.errors}}
+                    <span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
+                </td>
+                <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
+            </tr>
+        </tbody>
+    </table>
+    <label class="checkbox">
+        {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                                                    是否启动DHCP
+    </label>
+    <div class="operate_btn">
+        <button class="btn btn-inverse del" type="button">删 除</button>
+    </div>
+    </div>          
+    </fieldset>
+    <p class="add_btn"><button class="btn btn-primary add" type="button">继续添加</button></p>
+    <div class="form-actions">
+        <div class="row-fluid">
+          <div class="span3"></div>
+          <div class="span3"><button type="button" class="btn btn-primary" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-primary" onclick="create_vms({{ sliceid }})">{% trans "Submit" %}</button></div>
+          <div class="span3"></div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+</form>
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
+{% endblock %}

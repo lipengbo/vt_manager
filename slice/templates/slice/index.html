@@ -1,0 +1,16 @@
+{% extends "site_base.html" %}
+
+{% block body %}
+<div class="row">
+    {% for slice_obj in slice_objs %}
+    <div class="span4">
+        <div class="well">
+            <h3>{{ slice_obj.name }}</h3>
+            <blockquote>
+                {{ slice_obj.description }}
+            </blockquote>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

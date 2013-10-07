@@ -1,0 +1,70 @@
+{% extends "site_base.html" %}
+
+{% load url from future %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block head_title %}{% endblock %}
+{% block breadcrumb_base %}{% endblock %}
+
+{% block body_class %}home index{% endblock %}
+
+{% block body_base %}
+{% block body %}
+<div class="well banner">
+    <header class="jumbotron masthead">
+      <div class="inner">
+        <h1>欢迎进入CENI实验平台</h1>
+        <p>您可以通过创建或参与一个项目进行实验</p>
+        <p class="enter_btn">
+          <a href="{% url "project_apply" %}" class="btn btn-large">参与项目</a>
+          <a href="{% url "project_create" %}" class="btn btn-info btn-large">创建项目</a>
+        </p>
+      </div>
+</header>
+</div>
+
+<div class="row-fluid">
+                 <div class="alert alert-block nothing_tip">
+                     <h4>没有已创建的项目,请通过上方"创建项目"按钮进行创建！</h4>
+                </div>
+                 <ul class="thumbnails example-sites">
+                    {% for project in projects %}
+                    <li class="span3">
+                        <a href="{% url "project_delete" project.id %}?next={% url "project_manage" %}" class="btn-delete close">×</a>
+                        <a class="thumbnail" href="{% url "project_detail" project.id %}" target="_blank">
+                        <img src="{% static "img/001.png" %}" />
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td width="80">项目名称：</td>
+                                    <td>{{ project.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">Slice个数：</td>
+                                    <td>{{ project.slice_set.count }}</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">成员个数：</td>
+                                    <td>{{ project.memberships.count }}个</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">创建者：</td>
+                                    <td>{{ project.owner }}</td>
+                                </tr>
+                            </tbody>
+                        </table>            
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  <a class="edit view_more" href="{% url "project_index" %}">查看更多>></a>
+</div>
+
+{% endblock %}
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/close_project.js"></script>
+{% endblock %}
+

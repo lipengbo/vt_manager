@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load i18n %}
+
+{% block breadcrumb %}
+<li class="active">{% trans "Vm list" %}</li>
+{% endblock %}
+
+{% block body %}
+<div class="fill_form form-wizard">
+    <fieldset class="base_info">
+        <legend>虚拟机
+	    <a data-toggle="modal" href="{% url create_vm sliceid %}" class="btn btn-primary edit">添 加</a>
+            <a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-primary edit">返 回</a>
+        </legend>
+        <table class="table">
+            <tbody>
+            {% for vm in vms %}
+                    <tr>
+                        <td width="20%">{{ vm.name }}</td>
+                        <td width="25%">IP: {{ vm.ip }}</td>
+                        <td width="30%">所属网络节点: {{ vm.server.ip }}</td>
+			<td width="25%">
+			    {% if vm.state == 1 %}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
+			    {%else%}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+			        <button type="button" onclick="" class="btn" disabled>登录</button>
+			    {%endif%}
+  			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete">删除</button>
+			</td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/vm.js"></script>
+{% endblock %}
