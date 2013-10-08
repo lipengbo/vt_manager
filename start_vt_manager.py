@@ -5,6 +5,12 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 import os
+
+
+def mklogdir():
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+mklogdir()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ccf.settings")
 import traceback
 from twisted.internet import reactor
