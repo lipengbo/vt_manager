@@ -26,10 +26,10 @@ class Filter(object):
             return False
         mem_free = float(host_status['mem']['free'])
         mem_total = float(host_status['mem']['total'])
-        if config.max_mem < (mem_total - mem_free + self.mem) / mem_total:
+        if config.max_mem < (mem_total - mem_free - self.mem) / mem_total:
             return False
         disk_free = float(host_status['disk_free'])
-        if config.max_disk < disk_free - self.disk:
+        if config.max_disk > disk_free - self.disk:
             return False
         return hostid
 
@@ -79,13 +79,12 @@ class VTManager(xmlrpc.XMLRPC):
         print '--------------------create vm------------------------------'
         return ComputeClient(hostip).create_vm(vminfo, netinfo)
 
-    def xmlrpc_delete_vm(self, hostip, vname, vm_ip):
+    def xmlrpc_delete_vm(self, hostip, vname):
         print '--------------------delete vm------------------------------'
         print 'hostip=%s' % hostip
         print 'vname=%s' % vname
-        print 'vm_ip=%s' % vm_ip
         print '--------------------delete vm------------------------------'
-        return ComputeClient(hostip).delete_vm(vname, vm_ip)
+        return ComputeClient(hostip).delete_vm(vname)
 
     def xmlrpc_set_domain_state(self, vname, state):
         VirtualMachine.objects.filter(uuid=vname).update(state=state)

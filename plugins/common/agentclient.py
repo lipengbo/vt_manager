@@ -16,10 +16,10 @@ class MonitorClient(object):
         return self.client.get_domain_state(vname)
 
     def get_host_info(self):
-        return self.client.get_host_info("test")
+        return self.client.get_host_info()
 
     def get_host_status(self):
-        return self.client.get_host_status("test")
+        return self.client.get_host_status()
 
 
 class ComputeClient(object):
@@ -54,5 +54,5 @@ class ComputeClient(object):
         """
         return self.client.create_vm(vmInfo, netInfo)
 
-    def delete_vm(self, vname, vm_ip):
-        return self.client.delete_vm(vname, vm_ip)
+    def delete_vm(self, vname):
+        return self.client.delete_vm(vname)
