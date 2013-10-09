@@ -30,7 +30,7 @@ class StateManager(object):
     def __update_domain_state(self, host_id, host_ip):
         server = Server.objects.get(id=host_id)
         for domain in server.virtualmachine_set.all():
-            if domain.state in [DOMAIN_STATE['failed'], DOMAIN_STATE['building'], DOMAIN_STATE['notexist']]:
+            if domain.state in [DOMAIN_STATE['failed'], DOMAIN_STATE['building']]:
                 continue
             domain.state = MonitorClient(host_ip).get_domain_state(domain.uuid)
             domain.save()

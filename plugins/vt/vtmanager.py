@@ -80,7 +80,7 @@ class VTManager(xmlrpc.XMLRPC):
         return ComputeClient(hostip).create_vm(vminfo, netinfo)
 
     def xmlrpc_delete_vm(self, hostip, vname):
-        print '--------------------delete vm------------------------------'
+        print '====================delete vm------------------------------'
         print 'hostip=%s' % hostip
         print 'vname=%s' % vname
         print '--------------------delete vm------------------------------'
