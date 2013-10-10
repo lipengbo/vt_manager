@@ -68,7 +68,7 @@ class Flavor(models.Model):
 
 
 class VirtualMachine(IslandResource):
-    uuid = models.CharField(max_length=20, null=True, unique=True)
+    uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True)
     mac = models.CharField(max_length=20, null=True)
     enable_dhcp = models.BooleanField(default=True)
