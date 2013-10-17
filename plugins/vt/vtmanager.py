@@ -20,6 +20,8 @@ class Filter(object):
     def check_resource_by_monitor(self, hostid, hostip):
         client = MonitorClient(hostip)
         host_status = client.get_host_status()
+        if config.unique_hosts_per_alloc <= VirtualMachine.objects.filter(server=Server.objects.get(id=hostid)).count():
+            return False
         if self.vcpu > int(client.get_host_info()['vcpus']):
             return False
         if config.max_cpu < float(host_status['cpu_percent']):
