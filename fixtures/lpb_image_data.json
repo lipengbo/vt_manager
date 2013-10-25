@@ -1,39 +1,6 @@
 [
     {
-        "pk": 1,
-        "model": "vt.image",
-        "fields": {
-            "url": "http://192.168.5.107:9292/v1/image/7fc070b8-88a5-47ba-9ef0-d98dba9edad5",
-            "version": null,
-            "type": null,
-            "uuid": "7fc070b8-88a5-47ba-9ef0-d98dba9edad5",
-            "name": "windowsxp"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "vt.image",
-        "fields": {
-            "url": "http://192.168.5.107:9292/v1/image/a09273ab-382a-4622-b18c-705fda77bdcc",
-            "version": null,
-            "type": null,
-            "uuid": "a09273ab-382a-4622-b18c-705fda77bdcc",
-            "name": "15g_img"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "vt.image",
-        "fields": {
-            "url": "http://192.168.5.107:9292/v1/image/53807c3b-8d25-4d4f-9249-a798ce0b7013",
-            "version": null,
-            "type": null,
-            "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7013",
-            "name": "9m_img"
-        }
-    },
-    {
-        "pk": 4,
+        "pk": 50,
         "model": "vt.image",
         "fields": {
             "url": "http://192.168.5.107:9292/v1/image/53807c3b-8d25-4d4f-9249-a798ce0b7014",
@@ -41,6 +8,66 @@
             "type": null,
             "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7014",
             "name": "floodlight"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 10,
+            "ram": 256,
+            "name": "micro",
+            "cpu": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 20,
+            "ram": 512,
+            "name": "mini",
+            "cpu": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 40,
+            "ram": 1024,
+            "name": "small",
+            "cpu": 2
+        }
+    },
+    {
+        "pk": 4,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 80,
+            "ram": 2048,
+            "name": "medium",
+            "cpu": 2
+        }
+    },
+    {
+        "pk": 5,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 160,
+            "ram": 4096,
+            "name": "large",
+            "cpu": 4
+        }
+    },
+    {
+        "pk": 6,
+        "model": "vt.flavor",
+        "fields": {
+            "hdd": 320,
+            "ram": 8192,
+            "name": "xlarge",
+            "cpu": 6
         }
     }
 ]

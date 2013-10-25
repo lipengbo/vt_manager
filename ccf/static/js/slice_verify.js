@@ -3,29 +3,35 @@ function check_slice_name(obj_id,flag){
 	//alert("in check_slice_form");
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
+	var user_id_obj = document.getElementById("user_id");
+	var len;
 	//var reg = /^([u4e00-u9fa5]|[ufe30-uffa0]|[a-zA-Z_])*$/;
 	var reg = /^[a-zA-Z_]\w*$/;
-	//alert(obj.value.length);
+	//alert(user_id_obj.value.length);
 	if(obj.value.length > 0){
-		if(!reg.test(obj.value)){
-			//alert("in 输入");
-			showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
-			return false;
-		}
-		else{
-			//alert("in green");
-			//alert(slice_exist);
-			isslice_exist(obj.value);
-			if(slice_exist){
-				//alert(slice_exist);
-				showInfo(info," * 该slice已经存在","red");
-				return false;
-			}
-			else{
-				showInfo(info,"√","green");
-				return true;
-			}
-		}
+        if(!reg.test(obj.value)){
+        	//alert("in 输入");
+        	showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
+        	return false;
+        }
+        else{
+            if(obj.value.length + user_id_obj.value.length + 1 > 45){
+                len = 44 - user_id_obj.value.length;
+                showInfo(info," * 名称长度过长（最长"+len+"）","red");
+                return false;
+            }
+        	//alert("in green");
+        	//alert(slice_exist);
+        	isslice_exist(obj.value +"_"+user_id_obj.value);
+        	if(slice_exist){
+        		showInfo(info," * 该slice已经存在","red");
+        		return false;
+        	}
+        	else{
+        		showInfo(info,"√","green");
+        		return true;
+        	}
+        }
 	}
 	else{
 		showInfo(info," * 必填","red");
@@ -36,13 +42,14 @@ function check_slice_name(obj_id,flag){
 function check_slice_description(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
-	if(obj.value.length > 0){
-		showInfo(info,"√","green");
-		return true;
+	var text = obj.value;
+	if(text.replace(/(^\s*)|(\s*$)/g, "").length == 0){
+	    showInfo(info," * 必填","red");
+        return false;
 	}
 	else{
-		showInfo(info," * 必填","red");
-		return false;
+		showInfo(info,"√","green");
+        return true;
 	}
 }
 //验证节点的选择
@@ -67,7 +74,7 @@ function check_slice_controller(obj_name){
 			if(objs[i].value=="default_create"){  
 				return true; 
 			}  
-			if(objs[i].value=="user_defined"){
+			if(objs[i].value=="user_define"){
 				controller_ip_port_obj = document.getElementById("controller_ip_port");
 				controller_ip_port = controller_ip_port_obj.value.split(":")
 				var info = document.getElementById("controller_ip_portInfo");
@@ -156,7 +163,8 @@ function check_nw_num(){
 	var old_nw_num_obj = document.getElementById("old_nw_num");
 	var slice_nw_obj = document.getElementById("slice_nw");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
-	var slice_name = slice_name_obj.value;
+	var user_id_obj = document.getElementById("user_id");
+	var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
 	var old_nw_owner = old_nw_owner_obj.value;
 	var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
 	var old_nw_num = old_nw_num_obj.value;
@@ -167,14 +175,14 @@ function check_nw_num(){
 	
 	if((slice_name!=old_nw_owner) || (nw_num!=old_nw_num)){
 		if(old_slice_nw==''){
-			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/";
+			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 		}
 		else{
 			if(nw_num!=old_nw_num){
-				check_url = "http://" + window.location.host + "/slice/change_nw/"+old_nw_owner+"/"+slice_name+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 			else{
-				check_url = "http://" + window.location.host + "/slice/change_nw_owner/"+old_slice_nw+"/"+slice_name+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 		}
 	    $.ajax({
@@ -191,11 +199,11 @@ function check_nw_num(){
 	        		ajax_ret = false;
 	            }
 	            else{
-	            	alert(2);
 	            	if (data.value != 1){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
+		             	setTimeout("nw_timeout()",1750000);
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
@@ -223,12 +231,19 @@ function check_nw_num(){
 	}
 }
 
+//网段过期
+function nw_timeout(){
+	alert("分配的网段已过期！");
+	window.location.href = window.location.href;
+	//window.top.location.reload();
+}
+
 //验证交换机端口的选择
 function check_switch_port(){
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var info = document.getElementById("switch_portInfo");
 	for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(switch_port_ids_obj[i].checked){
+		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
 			switch_port_id = switch_port_ids_obj[i].value;
 			switchtype_obj = document.getElementById("switchtype"+switch_port_id);

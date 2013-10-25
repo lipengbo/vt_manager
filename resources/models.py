@@ -1,10 +1,13 @@
 from django.db import models
 from django.db.models.base import ModelBase
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.db.models import F
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext as _
+
+from plugins.common.agent_client import AgentClient
+from etc.config import function_test
 
 from project.models import Island
 from slice.models import Slice
@@ -84,10 +87,10 @@ class Server(IslandResource):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     state = models.IntegerField(null=True)
-    cpu = models.CharField(max_length=256, null=True)
-    mem = models.IntegerField(null=True)
-    bandwidth = models.IntegerField(null=True)
-    disk = models.IntegerField(null=True)
+    cpu = models.CharField(max_length=256, null=True, default=0)
+    mem = models.IntegerField(null=True, default=0)
+    bandwidth = models.IntegerField(null=True, default=0)
+    disk = models.IntegerField(null=True, default=0)
     ip = models.IPAddressField(null=False, unique=True)
     mac = models.CharField(max_length=256, null=True)
     os = models.CharField(max_length=256, null=True)
@@ -100,6 +103,8 @@ class Server(IslandResource):
         else:
             return None
 
+    class Meta:
+        verbose_name = _("Server")
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
@@ -147,6 +152,8 @@ class Switch(SwitchResource):
             else:
                 return OVS_TYPE['RELATED']
 
+    class Meta:
+        verbose_name = _("Switch")
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
@@ -154,6 +161,7 @@ class SliceSwitch(models.Model):
 
     class Meta:
         unique_together = (("slice", "switch"), )
+        verbose_name = _("Slice Switch")
 
 
 class SwitchPort(Resource):
@@ -185,6 +193,7 @@ class SwitchPort(Resource):
 
     class Meta:
         unique_together = (("switch", "port"), )
+        verbose_name = _("Switch Port")
 
 
 class SlicePort(models.Model):
@@ -193,6 +202,7 @@ class SlicePort(models.Model):
 
     class Meta:
         unique_together = (("slice", "switch_port"), )
+        verbose_name = _("Slice Port")
 
 
 class VirtualSwitch(Switch):
@@ -204,3 +214,15 @@ class VirtualSwitch(Switch):
 
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)
+
+    class Meta:
+        verbose_name = _("Virtual Switch")
+
+@receiver(pre_save, sender=Server)
+def vm_pre_save(sender, instance, **kwargs):
+    if not function_test:
+        agent_client = AgentClient(instance.ip)
+        info = agent_client.get_host_info(instance.ip)
+        instance.cpu = info['cpu']
+        instance.mem = info['mem']
+        instance.disk = info['hdd']

@@ -47,10 +47,11 @@
    
             for (var i=0, len=elements.length; i<len; i++) {          
                 var $this = $(elements[i]),
+                    navbarHeight = $(".navbar").height(),
                     data  = $this.data("pin"),
-                    from  = data.from,
+                    from  = data.from - navbarHeight,
                     to    = data.to;
-              
+
                 if (from + $this.outerHeight() > data.end) {
                     $this.css('position', '');
                     continue;
@@ -59,7 +60,7 @@
                 if (from < scrollY && to > scrollY) {
                     !($this.css("position") == "fixed") && $this.css({
                         left: $this.offset().left,
-                        top: 41+"px"
+                        top: navbarHeight + "px"
                     }).css("position", "fixed");
                     if (options.activeClass) { $this.addClass(options.activeClass); }
                 } else if (scrollY >= to) {

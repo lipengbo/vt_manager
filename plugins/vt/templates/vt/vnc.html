@@ -9,7 +9,7 @@
       min-height: 728px;
       max-height: 728px;
       border: 1px #fff solid;
-      background: #ccc;
+      background: #fff;
       text-align: center;
       font-color: #f00;
       margin:0 auto;
@@ -24,7 +24,7 @@
 {% block body %}
 {% if vm.state == 1 %}
   <div id="vncviewer">
-    <applet archive="/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="800">
+    <applet archive="/site_media/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="600">
       <param name="SOCKETFACTORY" value="com.tightvnc.vncviewer.SshTunneledSocketFactory">
       <param name="SSHHOST" value="{{ tunnel_host }}">
       <param name="HOST" value="{{ host_ip }}">

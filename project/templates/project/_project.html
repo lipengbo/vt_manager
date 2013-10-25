@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load project_tags %}
+<li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+                            <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
+                            <div class="thumbnail">
+                                <img src="{% static project.category.image %}" />  
+                                <h5>名称：{{ project.name }}</h5>
+                                <p>{{ project.description }}</p>
+                                <hr />
+                                <a href="{% url project_detail project.id %}">查看</a>
+                            </div>
+                        </li>
+

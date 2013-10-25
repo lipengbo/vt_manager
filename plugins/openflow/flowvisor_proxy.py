@@ -7,6 +7,7 @@ import json
 import pprint
 import re
 from optparse import OptionParser
+from etc.config import flowvisor_disable
 
 
 def toInt(val):
@@ -94,6 +95,8 @@ def makeMatch(matchStr):
 
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
+    if flowvisor_disable:
+        return "success"
     try:
         print data
         print flowvisor_url
@@ -132,18 +135,60 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
 
 
 def do_addSlice(args, passwd, enabled, flowvisor_url, flowvisor_ps):
-    print "Slice %s was successfully created" % args[0]
-    return "success"
+    if len(args) != 3:
+        print "add-slice : Must specify the slice name, controller url and admin contact"
+        return "error"
+    req = {"slice-name": args[0], "controller-url": args[1], "admin-contact": args[2], "password": passwd, "admin-status": enabled}
+    ret = connect("add-slice", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
+    if ret:
+        print "Slice %s was successfully created" % args[0]
+        return "success"
+    else:
+        return "error"
 
 
 def do_updateSlice(args, opts, flowvisor_url, flowvisor_ps):
-    print "Slice %s has been successfully updated" % args[0]
-    return "success"
+    if len(args) != 1:
+        print "update-slice : Must specify the slice that you want to update."
+        return "error"
+    req = {"slice-name": args[0]}
+    if opts.has_key('chost'):
+        req['controller-host'] = opts['chost']
+    if opts.has_key('cport'):
+        req['controller-port'] = opts['cport']
+    if opts.has_key('admin'):
+        req['admin-contact'] = opts['admin']
+    if opts.has_key('drop'):
+        req['drop-policy'] = opts['drop']
+    if opts.has_key('lldp'):
+        req['recv-lldp'] = opts['lldp']
+    if opts.has_key('flow'):
+        req['flowmod-limit'] = opts['flow']
+    if opts.has_key('rate'):
+        req['rate-limit'] = opts['rate']
+    if opts.has_key('status'):
+        req['admin-status'] = opts['status']
+    ret = connect("update-slice", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
+    if ret:
+        print "Slice %s has been successfully updated" % args[0]
+        return "success"
+    else:
+        return "error"
 
 
 def do_removeSlice(args, flowvisor_url, flowvisor_ps):
-    print "Slice %s has been deleted" % args[0]
-    return "success"
+    if len(args) != 1:
+        print "remove-slice : Must specify the slice that you want to remove."
+        return "error"
+    req = {"slice-name": args[0]}
+    ret = connect("remove-slice", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
+    print ret
+    if ret:
+        print "Slice %s has been deleted" % args[0]
+        return "success"
+    else:
+        print "Slice %s has not been deleted"
+        return "error"
 
 
 def do_listSlices(flowvisor_url, flowvisor_ps):
@@ -154,18 +199,75 @@ def do_listSlices(flowvisor_url, flowvisor_ps):
 
 
 def do_addFlowSpace(args, passwd, flowvisor_url, flowvisor_ps):
-    print "Flowspace %s has been created." % args[0]
-    return "success"
+    if len(args) != 5:
+        print "add-flowpace : Requires 5 arguments; only %d given" % len(args)
+        print "add-flowspace: <flowspace-name> <dpid> <priority> <match> <slice-perm>"
+        return "error"
+    match = makeMatch(args[3])
+    req = {"name": args[0], "dpid": args[1], "priority": int(args[2]), "match": match }
+    actions = args[4].split(',')
+    acts = []
+    for action in actions:
+        parts = action.split('=')
+        act = { 'slice-name': parts[0], "permission": int(parts[1]) }
+        acts.append(act)
+    req['slice-action'] = acts
+    ret = connect("add-flowspace", data=[req], flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
+    print ret
+    if ret:
+        print "Flowspace %s has been created." % args[0]
+        return "success"
+    else:
+        return "error"
 
 
 def do_updateFlowSpace(args, opts, flowvisor_url, flowvisor_ps):
-    print "Flowspace %s has been updated." % args[0]
-    return "success"
+    if len(args) != 1:
+        print "update-flowpace : Requires 1 argument; only %d given" % len(args)
+        print "update-flowspace: <flowspace-name>"
+        return "error"
+    req = {'name': args[0]}
+    if opts.has_key('match'):
+        match = makeMatch(opts['match'])
+        req['match'] = match
+    if opts.has_key('queues'):
+        req['queues'] = opts['queues']
+    if opts.has_key('fqueue'):
+        req['force-enqueue'] = opts['fqueue']
+    if opts.has_key('dpid'):
+        req['dpid'] = opts['dpid']
+    if opts.has_key('prio'):
+        req['priority'] = opts['prio']
+    if opts.has_key('sact'):
+        actions = opts['sact'].split(',')
+        acts = []
+        for action in actions:
+            parts = action.split('=')
+            act = { 'slice-name' : parts[0], 'permission' : int(parts[1]) }
+            acts.append(act)
+        req['slice-action'] = acts
+    if len(req.keys()) <= 1:
+        print "update-flowspace : You may want to actually specify something to update."
+        return "error"
+    ret = connect("update-flowspace", data=[req], flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
+    if ret:
+        print "Flowspace %s has been updated." % args[0]
+        return "success"
+    else:
+        return "error"
 
 
 def do_removeFlowSpace(args, flowvisor_url, flowvisor_ps):
-    print "Flowspace entries have been removed."
-    return "success"
+    if len(args) < 1:
+        print "remove-flowpace : Must specify the name of the flowspace to remove."
+        return "error"
+    ret = connect("remove-flowspace", data=args, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps) 
+    print ret
+    if ret:
+        print "Flowspace entries have been removed."
+        return "success"
+    else:
+        return "error"
 
 
 def do_listFlowSpace(flowvisor_url, flowvisor_ps):

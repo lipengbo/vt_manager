@@ -12,6 +12,12 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
     """flowvisor上添加slice
     """
     LOG.debug('flowvisor_add_slice')
+    if flowvisor:
+        print "h1"
+    if controller:
+        print "h2"
+    if user_email:
+        print "h3"
     if flowvisor and controller and user_email:
         controllerAdd = 'tcp:' + str(controller.ip) + ':' + str(controller.port) + ''
         args = [slice_name, controllerAdd, user_email]

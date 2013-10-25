@@ -8,6 +8,7 @@ urlpatterns = patterns('project.views',
     url(r'^delete/member/(?P<id>\d+)/$', "delete_member", name='project_delete_member'),
     url(r'^create/$', "create_or_edit", name='project_create'),
     url(r'^apply/$', "apply", name='project_apply'),
+    url(r'^applicant/(?P<id>\d+)/$', "applicant", name='project_applicant'),
     url(r'^manage/$', "manage", name='project_manage'),
     url(r'^invite/(?P<id>\d+)/$', "invite", name='project_invite'),
 )

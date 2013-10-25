@@ -19,7 +19,7 @@
             </div>
             <div class="clearfix"></div>
             <fieldset>
-                 <legend>待审批成员<button type="button" class="btn btn-danger edit">拒绝</button><button type="button" class="btn btn-success edit">批准</button></legend>
+                 <legend><button type="button" class="btn btn-danger edit">拒绝</button><button type="button" class="btn btn-success edit">批准</button>待审批成员</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -30,7 +30,7 @@
                             <th width="25%">项目</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="checkboxs">
                         <tr>
                             <td><input type="checkbox" name="c"></td>
                             <td>成员1</td>
@@ -95,40 +95,6 @@
             <div class="span4"></div>
           </div>
         </div>
-        <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-              <h3 id="myModalLabel">申请</h3>      
-            </div>
-            <div class="modal-body">
-              <form class="base_info">
-                  <table class="table">
-                      <tbody>
-                          <tr>
-                              <td width="150" class="v_top text_r">申请理由</td>
-                              <td><textarea rows="3"></textarea></td>
-                          </tr>
-                          <tr>
-                              <td class="text_r">申请角色</td>
-                              <td>
-                                  <select>
-                                      <option>学生</option>
-                                      <option>学者</option>
-                                      <option>工作人员</option>
-                                      <option>自由职业者</option>
-                                      <option>教授</option>
-                                    </select>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal">取消</button>
-              <button class="btn btn-primary">提交申请</button>
-            </div>           
-         </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>

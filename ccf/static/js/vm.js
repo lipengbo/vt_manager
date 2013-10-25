@@ -223,6 +223,11 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp
         },
         success: function(data) {
+            if(data.result==1)
+            {
+                //alert('Failed to operator vm!')
+                alert(data.error)
+            }
 
         }
         });
@@ -257,7 +262,7 @@ function get_select_server_name(){
     var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
         obj = switch_port_ids_obj[i];
-        if(obj.checked){
+        if(!obj.disabled){
             servername = obj.getAttribute("servername");
             if( servername && not_contains(results, servername))
             {
@@ -275,7 +280,7 @@ function get_select_server_id(){
     var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
         obj = switch_port_ids_obj[i];
-        if(obj.checked){
+        if(!obj.disabled){
             serverid = obj.getAttribute("serverid");
             if( serverid && not_contains(results, serverid))
             {
@@ -319,10 +324,12 @@ function do_vm_action(url)
         cache: false,
         async: false,  
         success: function(data) {
-            if(data==0)
+            if(data.result==1)
             {
-                alert('Failed to operator vm!')
+                //alert('Failed to operator vm!')
+                alert(data.error)
             }
+                window.location.reload();
         }
         });
 }

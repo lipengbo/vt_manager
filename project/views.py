@@ -18,7 +18,7 @@ from django.db.models import Q
 from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
-from invite.models import Invitation
+from invite.models import Invitation, Application
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -64,6 +64,8 @@ def invite(request, id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             users = users.filter(username__icontains=query)
             context['query'] = query
     context['users'] = users
@@ -71,14 +73,17 @@ def invite(request, id):
     if request.method == 'POST':
         user_ids = request.POST.getlist('user')
         message = request.POST.get('message')
-        for user_id in user_ids:
-            user = get_object_or_404(User, id=user_id)
-            form = InvitationForm({'message': message, 'to_user': user_id})
-            if form.is_valid():
-                invitation = form.save(commit=False)
-                invitation.from_user = request.user
-                invitation.target = project
-                invitation.save()
+        if message:
+            for user_id in user_ids:
+                user = get_object_or_404(User, id=user_id)
+                form = InvitationForm({'message': message, 'to_user': user_id})
+                if form.is_valid():
+                    invitation = form.save(commit=False)
+                    invitation.from_user = request.user
+                    invitation.target = project
+                    invitation.save()
+        else:
+            messages.add_message(request, messages.ERROR, _("Invitation message is required."))
     return render(request, 'project/invite.html', context)
 
 @login_required
@@ -95,6 +100,8 @@ def apply(request):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     categories = Category.objects.all()
@@ -103,17 +110,20 @@ def apply(request):
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
-        for project_id in project_ids:
-            project = get_object_or_404(Project, id=project_id)
-            form = ApplicationForm({"to_user": project.owner.id, "message": message})
-            if form.is_valid():
-                application = form.save(commit=False)
-                application.target = project
-                application.from_user = user
-                try:
-                    application.save()
-                except IntegrityError:
-                    pass
+        if message:
+            for project_id in project_ids:
+                project = get_object_or_404(Project, id=project_id)
+                form = ApplicationForm({"to_user": project.owner.id, "message": message})
+                if form.is_valid():
+                    application = form.save(commit=False)
+                    application.target = project
+                    application.from_user = user
+                    try:
+                        application.save()
+                    except IntegrityError:
+                        pass
+        else:
+            messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)
 
 @login_required
@@ -124,6 +134,9 @@ def create_or_edit(request, id=None):
     instance = None
     if id:
         instance = get_object_or_404(Project, id=id)
+        island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
+        print island_ids
+        context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
@@ -162,13 +175,37 @@ def delete_member(request, id):
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user == project.owner:
-        project.delete()
+        try:
+            project.delete()
+        except Exception, e:
+            messages.add_message(request, messages.ERROR, e)
     else:
-        return redirect("forbidden")
+        project.dismiss(request.user)
     if 'next' in request.GET:
         return redirect(request.GET.get('next'))
     return redirect("project_index")
 
+@login_required
+def applicant(request, id):
+    project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    target_type = ContentType.objects.get_for_model(project)
+    applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
+    context = {}
+    context['applications'] = applications
+    context['project'] = project
+
+    if request.method == 'POST':
+        application_ids = request.POST.getlist('application')
+        selected_applications = Application.objects.filter(id__in=application_ids)
+        for application in selected_applications:
+            if 'approve' in request.POST:
+                application.accept()
+            elif 'deny' in request.POST:
+                application.deny()
+
+    return render(request, 'project/applicant.html', context)
 
 def get_island_flowvisors(island_id=None):
     flowvisors = Flowvisor.objects.all()
@@ -189,6 +226,7 @@ def topology(request):
     hide_filter = request.GET.get('hide_filter')
     island_id = request.GET.get('island_id', 0)
     show_virtual_switch = request.GET.get('show_virtual_switch')
+    direct = request.GET.get('direct')
     try:
         island_id = int(island_id)
     except:
@@ -214,6 +252,7 @@ def topology(request):
         'total_island': total_island,
         'total_facility':total_facility,
         'all_gre_ovs': all_gre_ovs,
+        'direct': direct,
         'no_parent': no_parent,
         'hide_filter': hide_filter,
         'show_virtual_switch':show_virtual_switch,
@@ -234,10 +273,16 @@ def links_proxy(request, host, port):
     links = flowvisor.link_set.all()
     link_data = []
     for link in links:
+        if link.source.switch.island != flowvisor.island:
+            continue
+        if link.target.switch.island != flowvisor.island:
+            continue
         link_data.append({
             "dst-port": link.target.port,
+            "dst-port-name": link.target.name,
             "dst-switch": link.target.switch.dpid,
             "src-port": link.source.port,
+            "src-port-name": link.source.name,
             "src-switch": link.source.switch.dpid
             })
 
@@ -266,14 +311,14 @@ def switch_proxy(request, host, port):
     for switch_id_tuple in switch_ids_tuple:
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
-    switches = Switch.objects.filter(id__in=switch_ids)
+    switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
-        switch_data.append({"dpid": switch.dpid, "ports": port_data})
+        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")

@@ -10,6 +10,10 @@
 <style>
 img {
     max-width:none;
+
+}
+.dg-wrapper a div.slice_content {
+	display: block;
 }
 </style>
 {% endblock %}
@@ -18,11 +22,12 @@ img {
 {% block breadcrumb_base %}{% endblock %}
 
 {% block body %}
+{% block blank_block %}{% endblock %}
        	 <div class="top posit_re">
        	 	<div class="logo">
        		  <img src="{% static "img/logo.png" %}" width="400" align="baseline" />
        	    </div>
-       	    <div class="begin_button float_r">
+       	    <div class="begin_button">
                 <a href="{% url "project_manage" %}" class="btn btn-large btn-block btn-inverse">开始实验</a>
        	    </div>
        	 </div>
@@ -32,37 +37,34 @@ img {
 		      <li><a href="#topology" data-toggle="tab">物理拓扑</a></li>   
 		 </ul>
        	 
-		 <div class="tab-content tab_main">
+		 <div class="tab-content tab_main" style="height:auto;">
 		   <div class="tab-pane active" id="resource">
 		   	 <img src="{% static "img/001.png" %}" style="width:1024px;height:510px;" />
 		   </div>
-		   <div class="tab-pane" id="topology">..物理拓扑</div>
+           <div class="tab-pane" id="topology">
+                <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true" width="100%" height="603px;" frameborder="0">
+                </iframe>
+           </div>
 		 </div>
        
          <section id="dg-container" class="dg-container">
-				<div class="dg-wrapper">
-					<a href="#"><img src="{% static "img/002.jpg" %}" alt="image01"><div>某某实验拓扑图一</div></a>
-					<a href="#"><img src="{% static "img/002.jpg" %}" alt="image02"><div>某某实验拓扑图二</div></a>
-					<a href="#"><img src="{% static "img/002.jpg" %}" alt="image03"><div>某某实验拓扑图三</div></a>
-					<a href="#"><img src="{% static "img/002.jpg" %}" alt="image04"><div>某某实验拓扑图四</div></a>
-				</div>
-				<nav>	
-					<span class="dg-prev">&lt;</span>
-					<span class="dg-next">&gt;</span>
-				</nav>
+         	<div id="slice_show">
+			</div>
 		 </section>
-    
+    	
+    	 <div class="clear" style="display: none" >
+				<p id="topology_type">0</p>
+				<p id="STATIC_URL">{{STATIC_URL}}</p>
+		</div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript" src="{{ STATIC_URL}}js/modernizr.custom.53451.js"></script>
+<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
 <script type="text/javascript" src="{{ STATIC_URL}}js/jquery.gallery.js"></script>
 <script type="text/javascript">
 			$(function() {
 				$('#dg-container').gallery();
 			});
 		</script>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q&sensor=false" type="text/javascript"></script>
-    <script type="text/javascript" src="{{ STATIC_URL}}js/markerclusterer.js"></script>
-    <script src="{{ STATIC_URL}}js/data.json" type="text/javascript"></script>   
 {% endblock %}

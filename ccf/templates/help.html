@@ -39,6 +39,7 @@
        	 	</div>
        	 </div>
        </div>	
+
        <div class="span3 help_chose">
        	 <div class="help_main_wrap">
           <ul class="nav nav-list bs-docs-sidenav">
@@ -55,7 +56,9 @@
 	   <script src="{{ STATIC_URL}}js/jquery.pin.js"></script>
 	   <script type="text/javascript">
 		$(function() {
-			$(".help_chose").pin()
+			$(".help_chose").pin({
+			    containerSelector: ".help_all"
+			});
 		});
 	</script>
 	<script src="{{ STATIC_URL}}js/own.js"></script>

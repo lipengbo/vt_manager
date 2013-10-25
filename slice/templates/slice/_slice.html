@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load project_tags %}
+<li class="span6" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+    {%if slices%}
+    <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+    {%else%}
+    <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
+    {%endif%}
+    <div class="thumbnail" href="/slice/detail/{{ slice.id }}/">
+        <div class="row-fluid">
+            <div class="span5">
+                <div class="slice_left">
+                    <img src="{% static "img/cat_cloud.jpg" %}" />
+                    <ul>
+                        <li><i class="icon-file-alt icon-large"></i>项目一</li>
+                        <li><i class="icon-user icon-large"></i>ccf</li>
+                        <li><i class="icon-rss icon-large"></i>开启</li>
+                    </ul>
+                </div>
+                
+            </div>
+            <div class="span7"></div>
+        </div>
+    </div>
+</li>

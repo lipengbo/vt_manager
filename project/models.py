@@ -38,6 +38,7 @@ class Island(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    image = models.CharField(max_length=32, default='img/cat_other.png')
 
     def __unicode__(self):
         return self.name
@@ -61,6 +62,15 @@ class Project(models.Model):
     def add_member(self, user, is_owner=False):
         project_membership, created = Membership.objects.get_or_create(project=self,
                 user=user, defaults={'is_owner': is_owner})
+
+    def dismiss(self, user):
+        try:
+            project_membership = Membership.objects.get(project=self,
+                user=user)
+        except Membership.DoesNotExist:
+            pass
+        else:
+            project_membership.delete()
 
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
@@ -96,7 +106,7 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "{} - {}".format(self.user, self.project)
+        return u"{} - {}".format(self.user, self.project)
 
     class Meta:
         unique_together = (("project", "user"), )

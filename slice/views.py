@@ -11,6 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
+from django.contrib import messages
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, delete_slice_api, slice_change_description
@@ -29,11 +30,7 @@ from plugins.vt.forms import VmForm
 from resources.models import Server
 
 
-def index(request):
-    context = {}
-    return render(request, 'slice/index.html', context)
-
-
+@login_required
 def create(request, proj_id):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
@@ -59,10 +56,10 @@ def create(request, proj_id):
     return render(request, 'slice/create_slice.html', context)
 
 
+@login_required
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
-    error_info = None
     if request.method == 'POST':
         try:
             user = request.user
@@ -89,32 +86,27 @@ def create_first(request, proj_id):
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
-#             print slice_name
-#             print slice_description
-#             print island_id
-#             print controller_info
-#             print port_ids
-#             print slice_nw
             slice_obj = create_slice_step(project, slice_name,
                 slice_description, island, user, ovs_ports, controller_info, slice_nw)
         except Exception, ex:
-            print 'he'
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
-            IPUsage.objects.subnet_create_success(slice_obj.name)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
 
 
+@login_required
 def list(request, proj_id):
     """显示所有slice。"""
     project = get_object_or_404(Project, id=proj_id)
     context = {}
     context['project'] = project
+    context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
 
+@login_required
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -123,12 +115,12 @@ def edit_description(request, slice_id):
         try:
             slice_change_description(slice_obj, slice_description)
         except Exception, ex:
-            return render(request, 'slice/warning.html', {'info': str(ex)})
-        else:
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+            messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
+@login_required
 def edit_controller(request, slice_id):
     """编辑slice控制器。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -146,15 +138,12 @@ def edit_controller(request, slice_id):
         try:
             slice_change_controller(slice_obj, controller_info)
         except Exception, ex:
-            return render(request, 'slice/warning.html', {'info': str(ex)})
-        else:
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-#     context['slice_obj'] = slice_obj
-#     context['controller'] = slice_obj.get_controller()
-#     return render(request, 'slice/edit_slice_controller.html', context)
+            messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
+@login_required
 def detail(request, slice_id):
     """编辑slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -165,22 +154,40 @@ def detail(request, slice_id):
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['gws'] = []
     context['dhcps'] = []
-    context['vms'] = slice_obj.get_vms()[0:3]
+    context['vms'] = slice_obj.get_common_vms()
+    context['check_vm_status'] = 0
+    if slice_obj.state == 1:
+        all_vms = slice_obj.get_vms()
+        for vm in all_vms:
+            if vm.state == 8:
+                context['check_vm_status'] = 1
+                break
     return render(request, 'slice/slice_detail.html', context)
 
 
-def delete(request, slice_id):
+@login_required
+def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
-    try:
-        slice_obj.delete()
-    except Exception, ex:
-        return render(request, 'slice/warning.html', {'info': str(ex)})
-    return HttpResponseRedirect(
-        reverse("project_detail", kwargs={"id": project_id}))
+    if request.user == slice_obj.owner:
+        try:
+            slice_obj.delete()
+        except Exception, ex:
+            messages.add_message(request, messages.ERROR, ex)
+    else:
+        return redirect("forbidden")
+    if 'next' in request.GET:
+        return redirect(request.GET.get('next'))
+    if int(flag) == 1:
+        return HttpResponseRedirect(
+            reverse("project_detail", kwargs={"id": project_id}))
+    else:
+        return HttpResponseRedirect(
+            reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
+@login_required
 def start_or_stop(request, slice_id, flag):
     """启动或停止slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -190,20 +197,21 @@ def start_or_stop(request, slice_id, flag):
         else:
             stop_slice_api(slice_obj)
     except Exception, ex:
-        return render(request, 'slice/warning.html', {'info': str(ex)})
-    else:
-        return HttpResponseRedirect(
-            reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+        messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
+    print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
 
+@login_required
 def check_slice_name(request, slice_name):
     """
     校验用户所填slice名称是否已经存在
@@ -219,7 +227,8 @@ def check_slice_name(request, slice_name):
         return HttpResponse(json.dumps({'value': 0}))
 
 
-def create_nw(request, owner):
+@login_required
+def create_nw(request, owner, nw_num):
     """
     分配slice网段
     return:
@@ -228,22 +237,32 @@ def create_nw(request, owner):
           成功：value = 网段（192.168.5.6/27）
     """
     try:
-        nw = IPUsage.objects.create_subnet(owner)
+        nw_objs = Subnet.objects.filter(owner=owner)
+        if nw_objs:
+            IPUsage.objects.delete_subnet(owner)
+        print "net work 1"
+        nw = IPUsage.objects.create_subnet(owner, int(nw_num), 1800)
+        print "net work 2"
         if nw:
+            print "net work 3"
             return HttpResponse(json.dumps({'value': nw}))
         else:
+            print "net work 4"
             return HttpResponse(json.dumps({'value': 0}))
     except Exception, ex:
+        print "net work 5"
+        print ex
         return HttpResponse(json.dumps({'value': 0}))
 
 
+@login_required
 def delete_nw(request, owner):
     """
     删除slice网段
     return:
         value:
           失败:value = 0
-          成功：value = 网段（192.168.5.6/27）
+          成功：value = 1
     """
     try:
         if IPUsage.objects.delete_subnet(owner):
@@ -254,38 +273,11 @@ def delete_nw(request, owner):
         return HttpResponse(json.dumps({'value': 0}))
 
 
-def change_nw_owner(request, nw, new_owner):
-    """
-    更改slice网段的owner
-    return:
-        value:
-          失败:value = 0
-          成功：value = 1
-    """
-    try:
-        nw_obj = Subnet.objects.filter(netaddr=nw)
-        nw_obj.owner = new_owner
-        nw_obj.save()
-    except:
-        return HttpResponse(json.dumps({'value': 0}))
-    else:
-        return HttpResponse(json.dumps({'value': 1}))
-
-
-def change_nw(request, owner, new_owner):
-    """
-    更改slice网段的owner
-    return:
-        value:
-          失败:value = 0
-          成功：value = 1
-    """
-    try:
-        IPUsage.objects.delete_subnet(owner)
-        nw = IPUsage.objects.create_subnet(new_owner)
-        if nw:
-            return HttpResponse(json.dumps({'value': nw}))
-        else:
-            return HttpResponse(json.dumps({'value': 0}))
-    except:
-        return HttpResponse(json.dumps({'value': 0}))
+def get_show_slices(request):
+    """ajax获取首页展示slice。"""
+    slice_objs = Slice.objects.all()
+    slices = []
+    for slice_obj in slice_objs:
+        slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
+        slices.append(slice_show)
+    return HttpResponse(json.dumps({'slices': slices}))

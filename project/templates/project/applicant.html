@@ -1,0 +1,76 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+{% load endless %}
+
+{% block head_title %}成员审批{% endblock %}
+{% block breadcrumb %}
+<a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
+成员审批{% endblock %}
+
+{% block body %}
+{% paginate applications %}
+        <div class="fill_form">
+            <div class="search">
+                <form class="form-search">
+                  <div class="input-append">
+                    <input type="text" class="span2 search-query">
+                    <button type="submit" class="btn">搜索</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+        <form class="fill_form" action="" method="post" accept-charset="utf-8">
+            {% csrf_token %}
+            <fieldset>
+                <legend>
+                    <button class="btn btn-success edit" type="submit" name="approve">批准</button>
+                    <button type="submit" class="btn btn-danger edit" name="deny">拒绝</button>  
+                                                                待审批成员                   
+                </legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="checkall"><input type="checkbox"></th>
+                            <th width="15%">成员名称</th>
+                            <th width="35%">申请理由</th>
+                            <th width="10%">动作</th>
+                            <th width="25%">项目</th>
+                        </tr>
+                    </thead>
+                    <tbody class="checkboxs">
+                        {% for application in applications %}
+                        <tr>
+                            <td><input type="checkbox" name="application" value="{{ application.id }}"></td>
+                            <td>{{ application.from_user }}</td>
+                            <td>{{ application.message }}</td>
+                            <td>加入</td>
+                            <td>{{ application.target }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                 </table>
+              </fieldset>
+              {% if not projects %}
+              <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+              {% endif %}
+                <div class="pagination">
+                    <ul>
+                        {% show_pages %}
+                    </ul>
+                </div>
+        <div class="form-actions">
+          <div class="row-fluid">
+            <div class="span4"></div>
+            <div class="span4"><button type="button" onclick="window.history.back();" class="btn btn-large btn-block">返 回</button></div>
+            <div class="span4"></div>
+          </div>
+        </div>
+        </form>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+{% endblock %}
+

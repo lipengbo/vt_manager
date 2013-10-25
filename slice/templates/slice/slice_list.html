@@ -3,60 +3,35 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
-{% load project_tags %}
+{% load endless %}
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
 {% block breadcrumb %}
-<a href="/project/create/">创建项目</a><span class="divider">/</span>
+<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
 Slice列表
 {% endblock %}
 
 {% block body %}
+{% paginate slices %}
     <div class="fill_form">
         <fieldset>
-             <legend>我的Slice<button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></legend>
+             <legend><button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button>我的Slice</legend>
+             <div class="row-fluid">
+             {% for group in slices|group_by:4 %}
              <ul class="thumbnails example-sites">
-		         {% for slice in project.slice_set.all %}
-		        <li class="span3 thumbnail">
-		          <a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
-		            <img src="{% static "img/001.png" %}" />
-		            <table class="table">
-		                <tbody>
-		                    <tr>
-		                        <td width="100">Slice名称：</td>
-		                        <td>{{ slice.name }}</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">创建者：</td>
-		                        <td>{{ slice.owner }}</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">状态：</td>
-		                        <td>
-		                        {%if slice.state == 0 %}
-		                        停止
-		                        {%else%}
-		                        启动
-		                        {%endif%}
-		                        </td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">网络节点个数：</td>
-		                        <td>{{ slice.get_switches.count }}个</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">虚拟机个数：</td>
-		                        <td>{% resource_num slice.get_island "virtualmachine" %}{{ virtualmachine_num }}个</td>
-		                    </tr>
-		                </tbody>
-		            </table>
-		          </a>
-		          <a href="/slice/delete/{{ slice.id }}/" class="btn btn-info btn-small btn-inverse">移除</a>
-		        </li>
+		         {% for slice in group %}
+		              {% include "slice/_slice.html" %}
 		         {% endfor %}
 		     </ul>
+		     {% endfor %}
+		     </div>
          </fieldset>
+    </div>
+    <div class="pagination">
+        <ul>
+            {% show_pages %}
+        </ul>
     </div>
 {% endblock %}
 {% block extra_script %}

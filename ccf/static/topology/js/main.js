@@ -212,6 +212,7 @@ function recompose_dpid(dpid) {
 function highlight( data, i, element ) {
     //d3.select( element ).attr( "stroke", "black" );
 
+    var d = data;
     var content = "";
     
     if (data.id in origin_nodes_map) {
@@ -226,11 +227,28 @@ function highlight( data, i, element ) {
             "</tr>";
         $.each(origin_data.ports, function(index, port){
             var state = port.state == 1 ? "活跃" : "非活跃";
-            content += "<tr>" + 
-                "<td>" + port.name + "(" + port.portNumber+ ")</td>" + 
-            //    "<td>" + state + "</td>" + 
-            //    "<td>" + port.hardwareAddress + "</td>" + 
-                "</tr>";
+            content += "<tr><td>"; 
+                        content += d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                        var port_pairs = {};
+                        $.each(g_links_map[d.island_id], function(index, link) {
+                            var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                            }
+                            port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                            }
+                        });
+                        content += "</td></tr>";
         });
         content += "</table>";
         tooltip.showTooltip(content, d3.event);
@@ -345,10 +363,16 @@ function init_svg () {
     node.append("image")
         .attr("xlink:href", function (d) {
             var show_logical = $('#show-logical').attr('checked');
-            if (d.id.indexOf('7f:ff:') == 0 && !show_logical) {
+            if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
                 d.group = 2;
             }
             var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
+            if (d.id.indexOf('00:ee:') == 0) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
+            }
+            if (d.id.indexOf('00:ff:') == 0) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
+            }
 
             /*
             if (parent.selected_switches) {
@@ -362,7 +386,7 @@ function init_svg () {
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
     node.append("text").attr("dx", 40).attr("dy", ".35em")
-        .text(function(d) { return d.name });
+        .text(function(d) { return d.db_name ? d.db_name : d.name });
     node.on("click", function (d) {
         // TODO we could add some functionality here
         if (parent.add_port) {
@@ -382,8 +406,27 @@ function init_svg () {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
-                            port.name + "(" + port.portNumber+ ")" + 
-                            "</label>";
+                            d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                        var port_pairs = {};
+                        $.each(g_links_map[d.island_id], function(index, link) {
+                            var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                            }
+                            port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                            }
+                        });
+                        content += "</label>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {

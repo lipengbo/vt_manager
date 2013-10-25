@@ -43,6 +43,7 @@ class IPManager(models.Manager):
         subnet = Subnet.objects.get(owner=owner)
         subnet.is_owned = False
         subnet.is_used = False
+        subnet.owner = None
         subnet.save()
         return True
 
@@ -90,6 +91,7 @@ class IPManager(models.Manager):
         unowned_subnets = subnets.filter(is_owned=False)
         for sub in unowned_subnets:
             if datetime.datetime.now(tz=pytz.UTC) >= sub.update_time + datetime.timedelta(seconds=timeout):
+#             if datetime.datetime.now() >= sub.update_time + datetime.timedelta(seconds=timeout):
                 return sub
         return False
 
@@ -170,12 +172,13 @@ class Network(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Network")
 
 
 class Subnet(models.Model):
     supernet = models.ForeignKey(Network)
     netaddr = models.CharField(max_length=20, null=False, unique=True)
-    owner = models.CharField(max_length=20, null=False, unique=True)
+    owner = models.CharField(max_length=20, null=True, unique=True)
     is_owned = models.BooleanField(default=False)
     is_used = models.BooleanField(default=False)
     size = models.IntegerField()
@@ -189,6 +192,7 @@ class Subnet(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Subnet")
 
 
 class IPUsage(models.Model):
@@ -202,6 +206,7 @@ class IPUsage(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Ip usage")
 
 
 @receiver(post_save, sender=Network)

@@ -8,6 +8,8 @@
 common
 {% endif %}
 {% endblock %}
+{% block breadcrumb_base %}
+{% endblock %}
 {% block extra_style %}
     <link href="{{ STATIC_URL }}topology/css/topology.css?v=1" rel="stylesheet">
     <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui.css" rel="Stylesheet" />
@@ -36,9 +38,6 @@ common
 <div class="header"></div>
 
 <div id="svg" class="">
-{% if not no_parent %}
-<hr class="sep">
-{% endif %}
 <div class="row-fluid">
     <div class="span12">
         {% if not no_parent %}
@@ -114,43 +113,6 @@ common
         {% endif %}
     </div>
     {% if not no_parent %}
-    <div class="slices">
-        <table class="table table-bordered">
-                <tr>
-                  <th >slice名称</th>
-                  <th >描述信息</th>
-                  <th >创建时间</th>
-                  <th >过期时间</th>
-                  <th >状态</th>
-                  <th >拥有者</th>
-                  <th >操作</th>
-                </tr>
-              {% for slice in slices %}
-                <tr>
-                    <td  class="operation"><a href='{% if slice.url %}{{slice.url}}{% else %}{% url detail_slice slice.id 2 %}{% endif %}' target="_blank">{{slice.name}}</a></td>
-                  <td>{{slice.description}}</td>
-                  <td>{{slice.create_date|date:"Y-m-d h:i:s"}}</td>
-                  <td>{{slice.expiration_date|date:"Y-m-d h:i:s"}}</td>
-                  <td>
-                      {%if slice.is_started == 0%}
-                      <span class="label">停止</span>
-                    {%else%}
-                    <span class="label label-success">启动</span>
-                    {%endif%}
-                  </td>
-                  <td>{{slice.owner_name}}</td>
-                  <td  class ="operation">
-                      <a href="{%url detail_slice slice.id 1%}">
-                          <i class="icon-pencil"></i>
-                          编辑</a>
-                      <a href="{%url slice_delete slice.id slice.project_id 2%}?redirect=/" class="del_slice" >
-                          <i class="icon-remove"></i>
-                          删除</a>
-                  </td>
-                </tr>
-               {% endfor %}
-        </table>
-    </div>
     {% endif %}
          <div id="del-confirm" style="display:none" title="提示">
 	<p>确定要删除该项目吗？</p>
@@ -159,19 +121,18 @@ common
 
 {% endblock %}
 </div>
-
-    <div class="port-modal modal hide fade">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>选择端口</h3>
-      </div>
-      <div class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a>
-        <a href="#" class="btn btn-primary confirm-port" data-dismiss="modal" aria-hidden="true">确定</a>
-      </div>
-    </div>
+<div class="port-modal modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>选择端口</h3>
+  </div>
+  <div class="modal-body">
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a>
+    <a href="#" class="btn btn-primary confirm-port" data-dismiss="modal" aria-hidden="true">确定</a>
+  </div>
+</div>
 </div> <!-- /container -->
 {% endblock %}
 
@@ -237,7 +198,7 @@ var opts = {
 };
 var spinner = new Spinner(opts);
 var target = document.getElementById('content');
-var direct_flowvisor_api = {% if not no_parent %}true{% else %}false{% endif %};
+var direct_flowvisor_api = {% if not no_parent or direct %}true{% else %}false{% endif %};
 {% if not no_parent or not svg %}
     var islands = [];
         

@@ -292,7 +292,7 @@ window.SwitchCollection = Backbone.Collection.extend({
                 _.each(data, function(sw) {
                     old_ids = _.without(old_ids, sw['dpid']);
                     origin_nodes_map[sw['dpid']] = sw;
-                    var model = {id: sw['dpid'], inetAddress: sw.inetAddress,
+                    var model = {id: sw['dpid'], db_name: sw.db_name, inetAddress: sw.inetAddress,
                               connectedSince: new Date(sw.connectedSince).toLocaleString(), hackBase:self.hackBase};
                     models.push(model);
                 });

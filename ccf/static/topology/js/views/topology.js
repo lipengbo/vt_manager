@@ -62,7 +62,7 @@ window.TopologyView = Backbone.View.extend({
             _.each(all_node_copy, function(n) {
                 /*
                 if (!$('#quanwang').attr('checked')) {
-                    if (n.id.indexOf('7f:ff:') == 0 ) {
+                    if (n.id.indexOf('00:ff:') == 0 ) {
                         delete_nodes.push(n);
                     }
                 }
@@ -90,7 +90,7 @@ window.TopologyView = Backbone.View.extend({
                                 value:10};
                     if (link.source && link.target ) {
                         if (!show_logical) {
-                            if (link.target.id.indexOf('7f:ff:') != 0 || link.source.id.indexOf('7f:ff:') != 0) {
+                            if (link.target.id.indexOf('00:ff:') != 0 || link.source.id.indexOf('00:ff:') != 0) {
                                 continue;
                             }
                         }
@@ -115,7 +115,7 @@ window.TopologyView = Backbone.View.extend({
             var deleted_link_indexes = [];
             $.each(all_links_copy, function (index, link) {
                 if (!$('#quanwang').attr('checked') && link) {
-                    if ((link.target && link.target.id && link.target.id.indexOf('7f:ff:') == 0) || (link.source && link.source.id && link.source.id.indexOf('7f:ff:') == 0)) {
+                    if ((link.target && link.target.id && link.target.id.indexOf('00:ff:') == 0) || (link.source && link.source.id && link.source.id.indexOf('00:ff:') == 0)) {
                         //deleted_link_indexes.push(link);
 
 

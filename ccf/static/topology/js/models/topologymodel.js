@@ -51,9 +51,14 @@ window.Topology = Backbone.Model.extend({
                 var nl = _.keys(self.nodes);
                 */
                 var nl = swl.pluck('id');
+                var db_names = swl.pluck('db_name');
 
                 self.nodes = _.map(nl, function (n) {return {name:n}});
-
+                for (var i = 0; i < self.nodes.length; i++) {
+                    self.nodes[i].db_name = db_names[i];
+                };
+                console.log(self.nodes, 'nodes', swl)
+                
                 // step 2: build array of links in format D3 expects
                 _.each(data, function (l) {
                     self.links.push({source:self.nodes[nl.indexOf(l['src-switch'])],
@@ -62,8 +67,6 @@ window.Topology = Backbone.Model.extend({
                                      capacity: bandwidth_capacities[Math.floor(Math.random() * 4)],
                                      value:10});
                 });
-                // console.log(self.nodes);
-                // console.log(self.links);
                 self.trigger('change');
                 //self.set(data);
             }

@@ -10,7 +10,7 @@
 {% block body %}
 		<div class="fill_form">
 			  <fieldset class="base_info">
-			    <legend>基本信息<button type="button" class="btn btn-primary edit">编 辑</button></legend>
+			    <legend><button type="button" class="btn btn-primary edit">编 辑</button>基本信息</legend>
 			    <table class="table">
 			    	<tbody>
 			    		<tr>
@@ -44,7 +44,7 @@
 				 			<td>1</td>
 				 			<td>ceni1</td>
 				 			<td>无线谷</td>
-				 			<td><button type="button" class="btn btn-inverse">移除</button></td>
+				 			<td><a data-toggle="modal" href="#alertModal" class="btn btn-inverse ">移除</a></td>
 				 		</tr>
 				 		<tr>
 				 			<td>2</td>
@@ -61,7 +61,7 @@
 			  	<div class="span4"></div>
 			  </div>
 			  <fieldset>
-			  	 <legend>Slice<button type="button" class="btn btn-link edit">更多>></button></legend>
+			  	 <legend><button type="button" class="btn btn-link edit">更多>></button>Slice</legend>
 			  	 <div class="row-fluid">
 			  	     <ul class="example-sites row-fluid">
                         <li class="span3">
@@ -172,6 +172,15 @@
 			  	 </div>
 			  </fieldset>
 		</div>
+		<div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-body">
+              <p class="text-center">确定删除吗？</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-info" data-dismiss="modal">取消</button>
+              <button class="btn btn-info">确定</button>
+            </div>           
+         </div>
 {% endblock %}
 {% block extra_script %}
 {% endblock %}

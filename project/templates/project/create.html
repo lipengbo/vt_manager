@@ -1,9 +1,13 @@
 {% extends "site_base.html" %}
 {% load bootstrap_tags %}
+{% load crispy_forms_field %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load project_tags %}
 
+{% block head_title %}
+项目{% if form.instance.id%}编辑{% else %}创建{% endif %}
+{% endblock %}
 {% block extra_style %}
     <style type="text/css" media="screen">
         #div_id_islands {
@@ -20,40 +24,62 @@
     {% csrf_token %}
   <fieldset>			   
     <legend>基本信息</legend>
-    <div class="form_inline">
+    <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
         <input type="text" name="name" value="{{ form.instance.name }}">
-    </div>   
-    <div class="form_inline">
+        {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                    <span class="help-inline">{{ error }}</span>
+                {% endfor %}
+        {% endif %}
+    </div>
+    <div class="form_inline control-group {% if form.description.errors %}error{% endif %}">
         <label class="v_top">项目描述</label>
         <textarea name="description" rows="5">{{ form.instance.description }}</textarea>
-    </div>
-    <div class="form_inline">
-        <label>项目类型</label>
-            <input class="span2" id="category-input" name="category" value="{{ form.instance.category.id }}" type="hidden">
-        <div class="input-append select_input">
-            <input class="span2" id="appendedDropdownButton" name="category_name" value="{{ form.instance.category }}" type="text">
-          <div class="btn-group">
-            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                {% for cat in cats %}
-                <li><a href="javascript:void(0);" data-id="{{ cat.id }}">{{ cat }}</a></li>
+        {% if form.description.errors %}
+                {% for error in form.description.errors %}
+                    <span class="help-inline">{{ error }}</span>
                 {% endfor %}
-            </ul>
-          </div>
-        </div>	
-    </div>     
+        {% endif %}
+    </div>
+    <div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
+        <label>项目类型</label>
+        <div class="input-append select_input">
+            <input class="span2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
+            <div class="btn-group">
+                <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    {% for cat in cats %}
+                    <li><a href="javascript:void(0);" data-id="{{ cat.id }}">{{ cat }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% if form.category_name.errors %}
+                {% for error in form.category_name.errors %}
+                    <span class="help-inline">{{ error }}</span>
+                {% endfor %}
+        {% endif %}
+    </div>
   </fieldset>
   <fieldset>
     <legend>添加资源 </legend>
         {% get_all_cities %}
         {% get_total_resources %}
-        <div class="progress" style="width:150px;margin-bottom:10px;">
-             <div class="bar bar-success" style="width: 33%;">交换机</div>
-             <div class="bar bar-warning" style="width: 33%;">服务器</div>
+        <div class="progress edit" style="width:150px;margin-bottom:10px;">
+             <div class="bar bar-success" style="width: 34%;">交换机</div>
+             <div class="bar bar-warning" style="width: 32%;">服务器</div>
              <div class="bar bar-danger" style="width: 34%;">控制器</div>
         </div>
-        <table class="table table-striped table-hover">
+        {% if form.islands.errors %}
+        <div class="control-group error">
+                {% for error in form.islands.errors %}
+                    <span class="help-inline">{{ error }}</span>
+                {% endfor %}
+        </div>
+        {% endif %}
+
+        <table class="table table-striped table-hover" cellspacing="1">
             <thead>
                 <tr>
                     <th width="10%" class="checkall"><input type="checkbox"></th>
@@ -62,7 +88,7 @@
                     <th width="40%">节点资源</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="checkboxs">
                 {% for city in cities %}
                     {% for island in city.island_set.all %}
                         {% resource_num island "switch" %}
@@ -70,7 +96,7 @@
                         {% resource_num island "controller" %}
                         {% if switch_num|add:server_num|add:controller_num %}
                         <tr>
-                            <td class=""><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
+                            <td><input type="checkbox" {% if island|project_selected:form.instance %}{% if island.id in slice_islands %} class="sliced" {% endif %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
@@ -90,7 +116,7 @@
 			  <div class="form-actions">
 				  <div class="row-fluid">
 				  	<div class="span3"></div>
-				  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">取 消</button></div>
+                    <div class="span3"><a href="javascript:;" onclick="window.history.back();" class="btn btn-large btn-block btn-info">取 消</a></div>
                     <div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
 				  	<div class="span3"></div>
 				  </div>
@@ -101,10 +127,13 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
-    <script  type="text/javascript" charset="utf-8">
-        $(".select_input ul li a").click(function(){
-            var data_id = $(this).data('id');
-            $("#category-input").val(data_id);
-        }); 
-    </script>
+<script type="text/javascript" charset="utf-8">
+    var has_slice = {% if has_slice %} true {% else %} false{% endif %};
+    $('input[type="checkbox"]').on('ifUnchecked', function(event){
+        if($(event.currentTarget).hasClass('sliced')) {
+            alert("已经有Slice创建，如果希望更换节点请先删除该节点上的Slice");
+            throw Error();
+        }
+    });
+</script>
 {% endblock %}

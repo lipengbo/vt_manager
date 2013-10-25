@@ -12,10 +12,10 @@
 		<div class="help_main fill_form form-wizard">
 			<ul class="row-fluid nav nav-pills">
 				<li class="span1"></li>
-				<li class="span2 active">
+				<li class="span2 visit">
 					<a href="#tab1" class="step">
 					<span class="number">1</span>
-					<span class="desc">基本信息</span>   
+					<span class="desc active">基本信息</span>   
 					</a>
 				</li>
 				<li class="span2">
@@ -50,26 +50,26 @@
 			    <label>名称</label>
 			    <input type="text">
 			    <label>描述</label>
-			    <textarea rows="8"></textarea>		     
-			  </fieldset>
-			  <fieldset>
-			  	 <legend>Slice节点 </legend>
-			  	 <label>选择节点</label>
+			    <textarea rows="8"></textarea>	
+			    <label>选择节点</label>
 			    <select>
 				  <option>无线谷</option>
 				  <option>北邮</option>
 				  <option>翠屏</option>
-				</select>	
+				</select>		     
 			  </fieldset>
-			  <div class="row-fluid">
-			  	<div class="span3"></div>
-			  	<div class="span3"><button type="submit" class="btn btn-large btn-block">返 回</button></div>
-			  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">下一步</button></div>
-			  	<div class="span3"></div>
+			   <div class="form-actions">
+				  <div class="row-fluid">
+				  	<div class="span3"></div>
+				  	<div class="span3"><button type="submit" class="btn btn-large btn-block">返 回</button></div>
+				  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">下一步</button></div>
+				  	<div class="span3"></div>
+				  </div>
 			  </div>
 			</form>
 		</div>
 	</div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
 {% endblock %}

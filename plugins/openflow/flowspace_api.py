@@ -214,7 +214,8 @@ def delete_default_flowspace(slice_obj, name, dl_src, dl_dst, nw_src, nw_dst):
         if nw_dst:
             flowspace_objs = FlowSpaceRule.objects.filter(name=name,
                 nw_dst=nw_dst, is_default=1)
-        flowspace_objs.delete()
+        if flowspace_objs:
+            flowspace_objs.delete()
     except Exception, ex:
         transaction.rollback()
 

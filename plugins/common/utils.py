@@ -68,7 +68,7 @@ def fetchfile(url, target):
 
 
 def gen_uuid():
-    return uuid.uuid4()
+    return str(uuid.uuid4())
 
 
 def is_uuid_like(val):
@@ -99,4 +99,4 @@ def timefunc(func):
 def generate_mac_address(ip):
     """Generate an Ethernet MAC address."""
     base_bin = netaddr.EUI('fa:16:00:00:00:00').value
-    return str(netaddr.EUI(base_bin | netaddr.IPAddress(ip).value))
+    return str(netaddr.EUI(base_bin | netaddr.IPAddress(ip).value)).replace('-', ':')

@@ -5,9 +5,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
-from project.models import Project
+from project.models import Project, Category
 
 class ProjectForm(forms.ModelForm):
+
+    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=64)
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
@@ -18,6 +20,5 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ("name", "description", "category", "islands")
-
+        fields = ("name", "description", "islands")
         widgets = {"islands": forms.SelectMultiple(attrs={"class": "hide"})}

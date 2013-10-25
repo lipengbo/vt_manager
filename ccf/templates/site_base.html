@@ -4,11 +4,16 @@
 
 {% load metron_tags %}
 {% load i18n %}
-
-       {% block style_base %}
+        
+        <title>{% block head_title_base %}CENI综合实验平台{% endblock %}</title>
+       {% block style_base %}           
             <link href="{% static "css/square/blue.css" %}" rel="stylesheet">
             <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
             <link href="{% static "css/own.css" %}" rel="stylesheet">
+            <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+            <!--[if IE 7]>
+            <link rel="stylesheet" href="{% static "css/font-awesome-ie7.min.css" %}">
+            <![endif]-->
             {% block extra_style %}{% endblock %}
         {% endblock %}
         
@@ -16,6 +21,7 @@
 		    {% block extra_head %}{% endblock %}
 		{% endblock %}
 	    {% block body_class %}common{% endblock %}
+	    {% block wrapper_class %}wrapper_all{% endblock %}
 		{% block topbar_base %}
                 <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse">
                     <div class="navbar-inner">
@@ -31,7 +37,7 @@
                                     {% block nav %}
                                     	<ul class="nav">
 					                      <li class="active"><a href="/">首页</a></li>
-					                      <li><a href="#">项目</a></li>
+					                      <li><a href="{% url "project_manage" %}">项目</a></li>
 					                      <li><a href="#">消息日志</a></li>
 					                      <li><a href="#">权限</a></li>
 					                      <li><a href="#">帮助</a></li>
@@ -51,26 +57,27 @@
                 </div>
             {% endblock %}
 		{% block body_base %}
+		    {% block blank_block %}<div class="blank_block"></div>{% endblock %}
 		    <div class="container">	        
 		    	{% block breadcrumb_base %}
+                {% if user.is_authenticated %}
 		        <ul class="breadcrumb">
-		            <li><span class="icon-home"></span><a href="{% url "project_index" %}">{% trans "Project" %}</a><span class="divider">/</span>
+		            <li><span class="icon-home"></span><a href="{% url "project_manage" %}">{% trans "Project" %}</a><span class="divider">/</span>
 		            {% block breadcrumb %}
 		            {% endblock %}
 		            </li>
 		        </ul>
+                {% endif %}
 		        {% endblock %}
 		        {% include "_messages.html" %}
-		        
-		        
 		         <div class="main_wrap">	
 		           <div class="main">	             		        
     		        {% block body %}
     		        {% endblock %}	
     		       </div>                
 		        </div>
-	        
 		    </div>
+		    <div class="push"></div>
 		{% endblock %}
 		
 		{% block script_base %}
@@ -93,7 +100,15 @@
                             return false;
                          }
                     });
-                });
+                    
+                    //列表框，指针放上去时显示删除图标                 
+                    $(".example-sites li").mouseenter(function(){
+                        $(this).children(".close").stop(true,false).fadeIn();
+                    });
+                    $(".example-sites li").mouseleave(function(){
+                        $(this).children(".close").stop(false,true).hide();
+                    });               
+                });               
             </script>
             {% block extra_script %}{% endblock %}
         {% endblock %}

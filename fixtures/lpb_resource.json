@@ -4,9 +4,9 @@
         "model": "resources.server",
         "fields": {
             "username": "root",
-            "update_time": "2013-09-25T08:58:09.521Z",
+            "update_time": "2013-09-24T03:04:21.302Z",
             "disk": 32,
-            "name": "server1",
+            "name": "server111",
             "mem": 32,
             "island": 1,
             "bandwidth": 32,
@@ -23,14 +23,14 @@
         "model": "resources.switch",
         "fields": {
             "username": "root",
-            "http_port": 1968,
+            "http_port": 6767,
             "name": "ovs114",
             "island": 1,
             "dpid": "00:00:00:1b:cd:03:00:6c",
             "has_gre_tunnel": false,
             "ip": "192.168.5.114",
             "password": "cdn%nf",
-            "port": 6634
+            "port": 6767
         }
     },
     {
@@ -38,14 +38,14 @@
         "model": "resources.switch",
         "fields": {
             "username": "root",
-            "http_port": 1968,
+            "http_port": 6635,
             "name": "ovs112",
             "island": 1,
             "dpid": "00:00:12:34:56:78:01:23",
             "has_gre_tunnel": false,
             "ip": "192.168.5.112",
             "password": "cdn%nf",
-            "port": 6633
+            "port": 6635
         }
     },
     {
@@ -53,14 +53,14 @@
         "model": "resources.switch",
         "fields": {
             "username": "root",
-            "http_port": 1968,
-            "name": "ovs109",
+            "http_port": 3367,
+            "name": "ovs111",
             "island": 1,
-            "dpid": "00:ff:00:00:00:00:b1:09",
+            "dpid": "ff:ff:00:00:00:00:b1:09",
             "has_gre_tunnel": false,
-            "ip": "127.0.0.1",
+            "ip": "192.168.5.111",
             "password": "cdn%nf",
-            "port": 144
+            "port": 6636
         }
     },
     {
@@ -68,8 +68,8 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 1,
-            "name": "eth1",
-            "port": 1
+            "name": "",
+            "port": 0
         }
     },
     {
@@ -77,26 +77,44 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 2,
-            "name": "eth2",
-            "port": 7
+            "name": "",
+            "port": 1
         }
     },
     {
         "pk": 3,
         "model": "resources.switchport",
         "fields": {
-            "switch": 3,
-            "name": "eth2",
-            "port": 1
+            "switch": 2,
+            "name": "",
+            "port": 0
         }
     },
     {
         "pk": 4,
         "model": "resources.switchport",
         "fields": {
+            "switch": 3,
+            "name": "",
+            "port": 1
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 3,
+            "name": "",
+            "port": 0
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.switchport",
+        "fields": {
             "switch": 1,
-            "name": "eth4",
-            "port": 3
+            "name": "",
+            "port": 1
         }
     },
     {
@@ -111,7 +129,7 @@
         "model": "openflow.controller",
         "fields": {
             "username": "root",
-            "http_port": 5454,
+            "http_port": 1968,
             "name": "controller1",
             "slices": [],
             "island": 1,
@@ -121,7 +139,27 @@
             "content_type": null,
             "ip": "192.168.5.103",
             "password": "cdn%nf",
-            "port": 5455
+            "port": 1967
+        }
+    },
+    {
+        "pk": 2,
+        "model": "openflow.controller",
+        "fields": {
+            "username": "",
+            "http_port": 0,
+            "name": "user_define",
+            "slices": [
+                1
+            ],
+            "island": 1,
+            "object_id": null,
+            "is_root": false,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.167.9.8",
+            "password": "",
+            "port": 6777
         }
     },
     {
@@ -131,7 +169,9 @@
             "username": "root",
             "http_port": 8181,
             "name": "flowvisor1",
-            "slices": [],
+            "slices": [
+                1
+            ],
             "island": 1,
             "object_id": null,
             "state": 1,
@@ -155,8 +195,8 @@
         "model": "openflow.link",
         "fields": {
             "flowvisor": 1,
-            "source": 2,
-            "target": 1
+            "source": 3,
+            "target": 4
         }
     },
     {
@@ -164,17 +204,8 @@
         "model": "openflow.link",
         "fields": {
             "flowvisor": 1,
-            "source": 3,
-            "target": 4
-        }
-    },
-    {
-        "pk": 4,
-        "model": "openflow.link",
-        "fields": {
-            "flowvisor": 1,
-            "source": 4,
-            "target": 3
+            "source": 5,
+            "target": 6
         }
     },
     {
@@ -182,7 +213,7 @@
         "model": "openflow.flowvisorlinksmd5",
         "fields": {
             "flowvisor": 1,
-            "md5": "d32b5b7cbf5676c301254de2e0872afa"
+            "md5": "76a868d33c8fb1846e499bfc64f06102"
         }
     }
 ]

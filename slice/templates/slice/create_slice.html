@@ -5,9 +5,9 @@
 {% load url from future %}
 {% load staticfiles %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}创建Slice{% endblock %}
 {% block breadcrumb %}
-	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 	<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
 	创建Slice
 {% endblock %}
@@ -57,12 +57,13 @@
                  <legend>基本信息</legend>
                  <div class="form_inline">
                     <label>Slice名称</label>
-                    <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label>Slice描述</label>
-                    <textarea rows="5" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <label class="v_top">Slice描述</label>
+                    <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -90,6 +91,7 @@
                   </div>
               </div>
              </div>
+             
              <div class="tab_part">
              <fieldset>
                 <legend>Slice网络节点选择</legend>
@@ -104,9 +106,10 @@
                     <span class="label label-success">虚拟机关联节点</span>
                   </div>
                   <div class="main_frame">
-                      <input type="hidden" name="switches" id="topology-switch" value="" />
+                        <input type="hidden" name="switches" id="topology-switch" value="" />
                         <iframe id="topology-iframe" width="100%" height="100%" src="" frameborder="0"></iframe>
                   </div>
+                  <div class="clear"></div>
                   <table class="switch-table table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
@@ -118,7 +121,7 @@
                     </thead>
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
-                    		<tr>
+                    		<tr class="hide switch-data">
                                     <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
@@ -134,11 +137,11 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                            <label class="checkbox inline">
+                                            <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
+						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
-						<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
 		                            {%endif%}
 	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
@@ -160,7 +163,7 @@
                       <option value="32">32</option>
                       <option value="64">64</option>
                     </select>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
                     <span id="nw_numInfo" style="display:inline;float:none;"></span>
                 </div>
               </fieldset>
@@ -180,13 +183,13 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="71">网络地址：</td>
+                            <td width="85">网络地址：</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
-                            	<input type="text" value="cjx" id="old_nw_owner" style="display:none"/>
-                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
+                            	<input type="text" value="" id="old_nw_owner" style="display:none"/>
+                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -203,20 +206,20 @@
                                                                                                                                创建控制器 
                                 </label>
                             </td>
-                            <td width="85">控制器类型</td>
+                            <td width="95">控制器类型</td>
                             <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
-                                  <!--<option value="pox">pox</option>
-                                  <option value="nox">nox</option>-->
+                                  <option value="pox">pox</option>
+                                  <option value="nox">nox</option>
                                 </select>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" title="此处默认创建floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建floodlight控制器" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <label class="tab_radio2" for="optionsRadios2">
-                                    <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
+                                    <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
                                                                                                                            自定义控制器
                               </label>
                             </td>
@@ -229,7 +232,7 @@
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info tooltip-demo">
+              <!--<fieldset class="base_info tooltip-demo">
                  <legend>虚拟网关配置<small>(可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分)</small></legend>
                  <table class="table">
                     <tbody>
@@ -237,9 +240,9 @@
                             <td width="70">网关宿主机</td>
                             <td>
                                 <select>
-                                  <option>floodlight</option>
-                                  <option>pox</option>
-                                  <option>nox</option>
+                                  <option>server1</option>
+                                  <option>server2</option>
+                                  <option>server3</option>
                                 </select>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
@@ -287,9 +290,9 @@
                     </tbody>
                 </table>
               </fieldset>
-              <label class="checkbox inline tab_checkbox">
+              <label class="inline tab_checkbox">
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
-              </label>
+              </label>-->
               
               <div class="form-actions">
                   <div class="row-fluid">
@@ -301,52 +304,61 @@
               </div>
              </div>     
              <div class="tab_part">
-                 <fieldset class="base_info vm_info_list">
+                 <fieldset class="base_info vm_info_list tooltip-demo">
                  <legend>虚拟机信息</legend>
                  <div class="sec_block">
-		 <table class="table">             
+		          <table class="table">             
                     <tbody>
                         <tr>
-                            <td width="100">名称</td>
+                            <td width="20%">名称</td>
+                            <td width="30%">
+				                <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />				
+                            </td>                           
                             <td>
-				<input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
-                            </td>
-                            <td><span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span></td>
+                                <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>
+                            </td>                           
                         </tr>
                         <tr>
                             <td>模板类型</td>
                             <td>
-                                {{ vm_form.flavor }} {{vm_form.flavor.errors}}
-				<span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+                                {{ vm_form.flavor }}                               
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>				
                             </td>
-                            <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                            <td>
+                                {{vm_form.flavor.errors}}
+                                <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+                            </td>
+                            <!--
+                            <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                            -->
                         </tr>
                         <tr>
                             <td>镜像类型</td>
+                            <td>{{ vm_form.image }}</td>
                             <td>
-                                {{ vm_form.image }} {{vm_form.image.errors}}
-				<span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
+                                {{vm_form.image.errors}}
+                                <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td>关联网络节点</td>
                             <td>
                                 <select onblur="check_vminfo()" name="server" id="id_server">
-					 <!--<option value="" selected="selected">---------</option>-->
-				</select>
-				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
+                                </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>				
                             </td>
-                            <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
+                            
+                            <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
+                            
                         </tr>
                     </tbody>
                  </table>
-                 <label class="checkbox">
+                 <label>
                                 {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                      是否启动DHCP
                  </label>
                  <div class="operate_btn">
-                    <button class="btn btn-info del" type="button">删 除</button>
+                    <button class="btn btn-inverse del" type="button">删 除</button>
                  </div>
                 </div>          
               </fieldset>
@@ -366,7 +378,7 @@
                  <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>序号</th>
+                            <th>名称</th>
                             <th>DPID</th>
                             <th>节点类型</th>
                             <th>所选端口</th>
@@ -381,7 +393,7 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="70">网络地址：</td>
+                            <td width="100">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
@@ -391,7 +403,7 @@
                  <legend>Slice控制器</legend>
                  <div id="list_controller"></div>
               </fieldset>
-              <fieldset class="base_info">
+              <!--<fieldset class="base_info">
                  <legend>Slice虚拟网关<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
@@ -416,7 +428,7 @@
                         </tr>                       
                     </tbody>
                  </table>   
-              </fieldset>
+              </fieldset>-->
               <fieldset>
                  <legend>Slice虚拟机列表</legend>
                  <table class="table table-striped table-hover">
@@ -430,7 +442,7 @@
                         </tr>
                     </thead>
                     <tbody id="id_vm_tbody">
- <!--                       <tr>
+                   <!-- <tr>
                             <td>VM1</td>
                             <td>small</td>
                             <td>ubuntu</td>
@@ -466,34 +478,41 @@
 {% endblock %}
 {% block extra_script %}
 <script>  
-	    $(document).ready(function() {
-            window.selected_ports = {};
-            window.add_port = function(port_id, is_delete) {
-                if(port_id in selected_ports) {
-                    if(is_delete) {
-                        delete selected_ports[port_id];
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
-                    }
-                } else {
-                    if(!is_delete) {
-                        selected_ports[port_id] = port_id;
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
+    $(document).ready(function() {
+        window.selected_ports = {};
+        window.add_port = function(port_id, is_delete) {
+            var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
+            if(port_id in selected_ports) {
+                if(is_delete) {
+                    delete selected_ports[port_id];
+
+                    checkbox.attr('disabled', "");
+                    checkbox.parents('label').hide();
+                    if(checkbox.parents('.switch-data').find('input.port-checkbox:not([disabled])').length == 0) {
+                        checkbox.parents('.switch-data').hide();
                     }
                 }
-                var ports = [];
-                for(port in selected_ports) {
-                    ports.push(port);
-                };
-                $('#topology-switch').val(ports.join(","));
+            } else {
+                if(!is_delete) {
+                    selected_ports[port_id] = port_id;
+                    checkbox.parents('label').show();
+                    checkbox.removeAttr('disabled');
+                    checkbox.parents('.switch-data').show();
+                }
+            }
+            var ports = [];
+            for(port in selected_ports) {
+                ports.push(port);
             };
-            $('input[name="switch_port_ids"]').on("ifChecked", function(){
-                selected_ports[$(this).val()] = $(this).val();
-            });
-            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
-                delete selected_ports[$(this).val()];
-            });
-            
-});
+            $('#topology-switch').val(ports.join(","));
+        };
+        $('input[name="switch_port_ids"]').on("ifChecked", function(){
+            selected_ports[$(this).val()] = $(this).val();
+        });
+        $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+            delete selected_ports[$(this).val()];
+        });
+    });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>

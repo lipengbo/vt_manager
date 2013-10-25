@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-15 08:06+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: models.py:15
+msgid "nostate"
+msgstr "初始状态"
+
+#: models.py:16
+msgid "running"
+msgstr "运行中"
+
+#: models.py:17
+msgid "blocked"
+msgstr ""
+
+#: models.py:18
+msgid "paused"
+msgstr ""
+
+#: models.py:19
+msgid "shutdown"
+msgstr ""
+
+#: models.py:20
+msgid "shutoff"
+msgstr ""
+
+#: models.py:21
+msgid "crashed"
+msgstr ""
+
+#: models.py:22
+msgid "pmsuspended"
+msgstr ""
+
+#: models.py:23
+msgid "building"
+msgstr ""
+
+#: models.py:24
+msgid "failed"
+msgstr ""
+
+#: models.py:25
+msgid "not exist"
+msgstr ""
+
+#: models.py:45
+msgid "vm for controller"
+msgstr ""
+
+#: models.py:46
+msgid "vm for slice"
+msgstr ""
+
+#: models.py:47
+msgid "vm for gateway"
+msgstr ""
+
+#: models.py:62
+msgid "Image"
+msgstr "镜像"
+
+#: models.py:74
+msgid "Flavor"
+msgstr "虚拟机模板"
+
+#: models.py:158
+msgid "Virtual Machine"
+msgstr "虚拟机"
+
+#: models.py:170
+msgid "Host Mac"
+msgstr "主机Mac地址"
+
+#: templates/vt/create_vm.html:11
+msgid "create vm"
+msgstr "创建虚拟机"
+
+#: templates/vt/create_vm.html:69
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/vt/create_vm.html:70
+msgid "Submit"
+msgstr "提交"
+
+#: templates/vt/vm_list.html:11 templates/vt/vnc.html:21
+msgid "Vm list"
+msgstr "虚拟机列表"

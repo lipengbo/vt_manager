@@ -4,11 +4,13 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load invite_tags %}
+{% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}项目申请{% endblock %}
 {% block breadcrumb %}项目申请{% endblock %}
 
 {% block body %}
+{% paginate  projects %}
         <div class="fill_form">
             <div class="search">
                 <div class="form-horizontal search_chose">
@@ -28,11 +30,10 @@
                 </form>
             </div>
             <div class="clearfix"></div>
-        </div>
           <form action="" method="POST" class="base_info">
               {% csrf_token %}
             <fieldset>
-                 <legend>项目列表<a data-toggle="modal" href="#applyModal" class="btn btn-info edit">申请加入</a></legend>
+                 <legend><a data-toggle="modal" href="#applyModal" class="btn btn-info edit">申请加入</a>项目列表</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -44,7 +45,7 @@
                             <th width="10%">申请状态</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="checkboxs">
                         {% for project in projects %}
                         <tr>
                             {% with project|application_status:user as status %}
@@ -70,15 +71,12 @@
                     </tbody>
                  </table>
               </fieldset>
+              {% if not projects %}
+              <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+              {% endif %}
         <div class="pagination">
           <ul>
-            <li class="disabled"><a href="#">Prev</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
+              {% show_pages %}
           </ul>
         </div>   
         <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -114,6 +112,7 @@
                 </div>
          </div>
   </form>
+  </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>

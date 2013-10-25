@@ -13,6 +13,7 @@
 {% block breadcrumb_base %}{% endblock %}
 
 {% block body %}
+{% block blank_block %}{% endblock %}
     	<div class="login_logo">
     		<img src="{% static "img/logo.png" %}" />
     	</div>
@@ -37,11 +38,11 @@
     				<a href="#" class="btn btn-large btn-block btn-info">登 录</a>
     			</div>
     			<div class="span2">
-    				<a data-toggle="modal" href="#myModal" class="btn btn-large btn-block btn-info" id="register">注册</a>
+    				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-block btn-info" id="register">注册</a>
     			</div>
     		</div>
     	</div>
-        <div id="myModal" class="modal hide fade">
+        <div id="registerModal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">×</a>
               <h3>注册</h3>

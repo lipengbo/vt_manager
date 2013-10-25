@@ -8,7 +8,9 @@ from resources.models import IslandResource, Server
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
+from plugins.common.agent_client import AgentClient
 from django.utils.translation import ugettext as _
+from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
     (1, _('running')),
@@ -56,6 +58,9 @@ class Image(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Image")
+
 
 class Flavor(models.Model):
     name = models.CharField(max_length=64)
@@ -66,13 +71,15 @@ class Flavor(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Flavor")
+
 
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True)
     mac = models.CharField(max_length=20, null=True)
     enable_dhcp = models.BooleanField(default=True)
-    vnc_port = models.IntegerField(null=True)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
@@ -104,23 +111,44 @@ class VirtualMachine(IslandResource):
     def get_slice_id(self):
         return self.slice.id
 
-    def get_image_uuid(self):
-        return self.image.uuid
-
-    def get_image_name(self):
-        return self.image.name
-
-    def get_image_url(self):
-        return self.image.url
-
     def create_vm(self):
-        print '----------------------create a vm=%s -------------------------' % self.name
+        if function_test:
+            print '----------------------create a vm=%s -------------------------' % self.name
+        else:
+            vmInfo = {}
+            vmInfo['name'] = self.uuid
+            vmInfo['mem'] = self.flavor.ram
+            vmInfo['cpus'] = self.flavor.cpu
+            vmInfo['img'] = self.image.uuid
+            vmInfo['hdd'] = self.flavor.hdd
+            vmInfo['glanceURL'] = self.image.url
+            vmInfo['type'] = self.type
+            vmInfo['network'] = []
+            network = {}
+            network['address'] = self.get_ipaddr + '/' + str(self.get_prefixlen)
+            network['gateway'] = self.get_network()
+            vmInfo['network'].append(network)
+            agent_client = AgentClient(self.server.ip)
+            agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
-        print '----------------------delete a vm=%s -------------------------' % self.name
+        if function_test:
+            print '----------------------delete a vm=%s -------------------------' % self.name
+        else:
+            agent_client = AgentClient(self.server.ip)
+            agent_client.create_vm(self.uuid)
 
     def do_action(self, action):
-        print '----------------------vm action=%s-------------------------' % action
+        if function_test:
+            print '----------------------vm action=%s-------------------------' % action
+            result = True
+        else:
+            agent_client = AgentClient(self.server.ip)
+            result = agent_client.do_domain_action(self.uuid, action)
+        return result
+
+    class Meta:
+        verbose_name = _("Virtual Machine")
 
 
 class HostMac(models.Model):
@@ -129,6 +157,9 @@ class HostMac(models.Model):
     host_id = models.PositiveIntegerField()
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     host = generic.GenericForeignKey('host_type', 'host_id')
+
+    class Meta:
+        verbose_name = _("Host Mac")
 
 
 @receiver(pre_save, sender=VirtualMachine)
@@ -139,8 +170,6 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.uuid = utils.gen_uuid()
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
-    if not instance.vnc_port:
-        instance.vnc_port = 5900 + VirtualMachine.objects.filter(server=instance.server).count()
     if not instance.state:
         instance.state = DOMAIN_STATE_DIC['building']
 

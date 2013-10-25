@@ -15,17 +15,30 @@ $(document).ready(function() {
 	
 	//虚拟机创建页面，添加和删除按钮功能
 	$(".add").click(function(){
-		$(".sec_block").first().clone(true).appendTo(".vm_info_list");		
+		$(".sec_block").first().clone().appendTo(".vm_info_list");		
 		$(".sec_block").last().find("input[type='text']").val("");
+		$(".sec_block").last().find("input[type='checkbox']").next().remove();
+		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
 		$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
+		$(".sec_block").last().find("input[type='checkbox']").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
 		$(".sec_block").last().find(".del").css("visibility","visible");
 		$(".sec_block:odd").css("background","#d9edf7");
+		$(".del").click(function(){
+           $(this).parent(".operate_btn").parent(".sec_block").remove();
+           $(".sec_block").css("background","#dff0d8");
+           $(".sec_block:odd").css("background","#d9edf7");
+        });
 	});
-	$(".del").click(function(){
+
+/*	$(".del").click(function(){
        $(this).parent(".operate_btn").parent(".sec_block").remove();
        $(".sec_block").css("background","#dff0d8");
        $(".sec_block:odd").css("background","#d9edf7");
-    });
+    });*/
     
     //创建slice第3步，选择控制器配置方式
     $(".tab_radio1, .tab_radio1 .iCheck-helper").click(function(){
@@ -44,7 +57,7 @@ $(document).ready(function() {
     });
     
     //slice详情启动停止按钮
-    $(".start_btn").click(function(){
+/*    $(".start_btn").click(function(){
         if($(this).hasClass("btn-success")){
             $(this).removeClass("btn-success").addClass("btn-danger");
             if($(this).hasClass("btn-large")){            
@@ -60,7 +73,8 @@ $(document).ready(function() {
                 $(this).text("启动");
             }           
         }
-    });
+    });      */
+    
     // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
@@ -70,13 +84,8 @@ $(document).ready(function() {
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
-            var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
-            if (checked_ports.length > 0) {
-                var clone = $(tr).clone();
-                clone.find('.icheckbox_square-blue.checked').remove();
-                clone.find('label').addClass('label label-success');
-                $('.switch-manifest tbody').append(clone);
-            }
+            var clone = $(tr).clone();
+            $('.switch-manifest tbody').append(clone);
         });
         $('.switch-manifest tbody input').attr('disabled', '');
     });
@@ -111,12 +120,20 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 4){
-           page_function4();
-           return;
+           ret = page_function4();
+           if (!ret){
+           		nowIndex = 0;
+           }
+    	   else{
+				return;
+    	   }
        }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
+       if(nowIndex == 0){
+       		$(".nav-pills .span2").removeClass("visit");
+       }
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
@@ -124,6 +141,7 @@ $(document).ready(function() {
        $("html, body").scrollTop(0);
        var thisIndex = $(".prev_btn").index(this) + 1;
        var nowIndex = thisIndex - 1;
+       //alert(vm_info_flag);
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
@@ -157,17 +175,26 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           $(".icheckbox_square-blue").iCheck('check');
+           $(".icheckbox_square-blue:not(.disabled)").iCheck('check');
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
     });
     
+    $(".checkboxs .iCheck-helper").each(function(){
+        $(this).click(function(){
+            if($(".checkboxs .checked").length<$(".checkboxs .iCheck-helper").length){
+                $(".checkall .icheckbox_square-blue").iCheck('uncheck');
+            } else if($(".checkboxs .checked").length==$(".checkboxs .iCheck-helper").length) {
+                $(".checkall .icheckbox_square-blue").iCheck('check');
+            }
+        });
+    });
+    
     //tooltip demo
      $('.tooltip-demo').tooltip({
-      selector: "a[data-toggle=tooltip]"
-    });
-
+       selector: "a[data-toggle=tooltip]"
+     });
 });
 
 
@@ -202,7 +229,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
-        fetch_serverinfo();
+    fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -228,8 +255,8 @@ function page_function3(){
 				str = str + "<table class=\"table\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">默认创建</td>"
-			        + "<td></td>"
+			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td>默认创建</td>"
 			        + "</tr>"
 			        + "<tr>"
 			        + "<td width=\"100\">控制器类型：</td>"
@@ -238,15 +265,15 @@ function page_function3(){
 			        + "</tbody>"
 			        + "</table>";  
 			}  
-			if(controller_type_obj[i].value=="user_defined"){
+			if(controller_type_obj[i].value=="user_define"){
 				var controller_ip_port_obj = document.getElementById("controller_ip_port");
 				var controller_ip_port = controller_ip_port_obj.value;
 				var str = "";
 				str = str + "<table class=\"table\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">自定义</td>"
-			        + "<td></td>"
+			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td>自定义</td>"
 			        + "</tr>"
 			        + "<tr>"
 			        + "<td width=\"100\">控制器IP端口：</td>"
@@ -265,7 +292,13 @@ function page_function3(){
 function page_function4(){
 	var project_id = $("#project_id").text();
 	//alert(project_id);
-	submit_slice_info(project_id);
+	ret1 = submit_slice_info(project_id);
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 
@@ -284,7 +317,7 @@ function submit_slice_info(project_id){
 	var controller_type;
 	var j = 0;
     for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(switch_port_ids_obj[i].checked){
+		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
 			if(j==0){
 				switch_port_ids = switch_port_ids_obj[i].value;
@@ -300,14 +333,14 @@ function submit_slice_info(project_id){
 			if(controller_type_objs[i].value=="default_create"){  
 				controller_type = "default_create";
 			}  
-			if(controller_type_objs[i].value=="user_defined"){
-				controller_type = "user_defined";
+			if(controller_type_objs[i].value=="user_define"){
+				controller_type = "user_define";
 	  		}  
 		}   
 	}
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
-
-	var submit_data = {"slice_name": slice_name_obj.value,
+    var user_id_obj = document.getElementById("user_id");
+	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
@@ -319,6 +352,7 @@ function submit_slice_info(project_id){
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
+	var ajax_ret = true;
 	$.ajax({
 			type: "POST",
 			url: check_url,
@@ -333,10 +367,23 @@ function submit_slice_info(project_id){
 	            }
 	            else{
 	            	alert(data.error_info);
+	            	ajax_ret = false;
 	            }
 	        },
 	        error: function(data) {
-	        	alert("创建slice失败！");
+	        	alert("创建slice异常！");
 	        }
 	});
+	if(ajax_ret){
+    	return true;
+    }
+    else{
+    	var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    	var old_nw_owner_obj = document.getElementById("old_nw_owner");
+    	var old_nw_num_obj = document.getElementById("old_nw_num");
+    	old_slice_nw_obj.value = "";
+    	old_nw_owner_obj.value = "";
+    	old_nw_num_obj.value = "";
+    	return false;
+    }
 }

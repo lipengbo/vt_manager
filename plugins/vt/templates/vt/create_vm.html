@@ -4,7 +4,11 @@
 {% load crispy_forms_tags %}
 
 {% block breadcrumb %}
-<li class="active">{% trans "create vm" %}</li>
+	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
+	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
+	<!--<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>-->
+	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
+        <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
@@ -12,43 +16,52 @@
     <legend>虚拟机信息</legend>
     <div class="sec_block">
     {% csrf_token %}
-    <table class="table">             
+    
+    <table class="table">
         <tbody>
             <tr>
-                <td width="100">名称</td>
-                <td>
+                <td width="20%">名称</td>
+                <td width="30%">
                     <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
+                </td>
+                <td>
                     <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
                 </td>
-                <td></td>
             </tr>
             <tr>
                 <td>模板类型</td>
                 <td>
-                    {{ vm_form.flavor }} {{vm_form.flavor.errors}}
+                    {{ vm_form.flavor }} 
+		<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
+                </td>
+                <td>{{vm_form.flavor.errors}}
                     <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
                 </td>
-                <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
             </tr>
             <tr>
                 <td>镜像类型</td>
                 <td>
-                    {{ vm_form.image }} {{vm_form.image.errors}}
+                    {{ vm_form.image }} 
+                </td>
+                <td>
+                    {{vm_form.image.errors}}
                     <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
                 </td>
-                <td></td>
             </tr>
             <tr>
                 <td>关联网络节点</td>
                 <td>
-                    {{ vm_form.server }} {{vm_form.server.errors}}
+                    {{ vm_form.server }} 
+		<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
+                </td>
+                <td>
+                    {{vm_form.server.errors}}
                     <span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                 </td>
-                <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
             </tr>
         </tbody>
     </table>
-    <label class="checkbox">
+    <label class="">
         {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                     是否启动DHCP
     </label>
@@ -57,12 +70,12 @@
     </div>
     </div>          
     </fieldset>
-    <p class="add_btn"><button class="btn btn-primary add" type="button">继续添加</button></p>
+    <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>
     <div class="form-actions">
         <div class="row-fluid">
           <div class="span3"></div>
-          <div class="span3"><button type="button" class="btn btn-primary" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
-          <div class="span3"><button type="button" class="btn btn-primary" onclick="create_vms({{ sliceid }})">{% trans "Submit" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }})">{% trans "Submit" %}</button></div>
           <div class="span3"></div>
         </div>
     </div>

@@ -87,9 +87,9 @@ class Subnet_test(TestCase):
         for i in xrange(32):
             sub = IPUsage.objects.create_subnet(owner=i + 1, timeout=120, ipcount=8)
             self.assertTrue(sub == '10.0.0.%s/29' % (i * 8))
-        for i in xrange(32):
-            sub = IPUsage.objects.create_subnet(owner=i + 33, timeout=120, ipcount=8)
-            self.assertTrue(sub == '10.0.1.%s/29' % (i * 8))
+        IPUsage.objects.delete_subnet(owner=31)
+        sub = IPUsage.objects.create_subnet(owner=31, timeout=120, ipcount=16)
+        self.assertTrue(sub)
 
     def test_16(self):
         for i in xrange(16):

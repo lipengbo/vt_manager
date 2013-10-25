@@ -1,0 +1,100 @@
+[
+    {
+        "fields": {
+            "date_created": "2013-10-08T05:08:26.916Z", 
+            "date_expired": "2013-10-08T13:08:18Z", 
+            "description": "slice01", 
+            "name": "slice01", 
+            "owner": 1, 
+            "project": 1, 
+            "state": 1
+        }, 
+        "model": "slice.slice", 
+        "pk": 1
+    }, 
+    {
+        "fields": {
+            "is_owned": true, 
+            "is_used": true, 
+            "netaddr": "10.0.0.0/26", 
+            "owner": "slice01", 
+            "size": 64, 
+            "supernet": 1, 
+            "update_time": "2013-10-08T05:24:36.330Z"
+        }, 
+        "model": "ipam.subnet", 
+        "pk": 2
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 1,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 2,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 3,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 6
+        }
+    }
+]

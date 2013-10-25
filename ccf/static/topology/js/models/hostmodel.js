@@ -47,7 +47,7 @@ window.HostCollection = Backbone.Collection.extend({
                 _.each(data, function(h) {
                     h.id = h.mac[0];
                     
-                    if (!show_logical && h.id.indexOf('7f:ff:') != 0 ) {
+                    if (!show_logical && h.id.indexOf('00:ff:') != 0 ) {
                         return;
                     }
                     origin_nodes_map[h.id] = h;

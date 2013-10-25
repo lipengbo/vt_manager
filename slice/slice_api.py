@@ -22,18 +22,30 @@ LOG = logging.getLogger("ccf")
 def create_slice_step(project, name, description, island, user, ovs_ports, controller_info, slice_nw):
     slice_obj = None
     try:
+        print 1
         slice_obj = create_slice_api(project, name, description, island, user)
+        print 2
         slice_add_ovs_ports(slice_obj, ovs_ports)
+        print 3
         create_add_controller(slice_obj, controller_info)
+        print 4
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+        print 5
+        IPUsage.objects.subnet_create_success(slice_obj.name)
+        print 6
         flowspace_nw_add(slice_obj, [], slice_nw)
+        print 7
 #         创建并添加网段
 #         创建并添加网关
 #         创建并添加dhcp
 #         创建并添加虚拟机
         return slice_obj
     except:
-        slice_obj.delete()
+        print 8
+        if slice_obj:
+            print 9
+            slice_obj.delete()
+        print 10
         raise
 
 
@@ -49,7 +61,9 @@ def create_slice_api(project, name, description, island, user):
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 date_now = datetime.datetime.now()
-                date_delta = datetime.timedelta(days=30)
+                date_delta = datetime.timedelta(seconds=5)
+#                 date_delta = datetime.timedelta(days=30)
+                print date_delta
                 expiration_date = date_now + date_delta
                 try:
                     slice_obj = Slice(owner=user,
@@ -109,12 +123,15 @@ def delete_slice_api(slice_obj):
 #             删除dhcp
 #             删除网关
 #             删除slice网络地址
-            print 1
-            del_nw = slice_obj.get_nw()
-            print 2
-            flowspace_nw_del(slice_obj, del_nw)
+#             print 1
+#             del_nw = slice_obj.get_nw()
+#             print 2
+#             flowspace_nw_del(slice_obj, del_nw)
             print 3
-            IPUsage.objects.delete_subnet(slice_obj.name)
+            try:
+                IPUsage.objects.delete_subnet(slice_obj.name)
+            except:
+                pass
             print 4
 #             删除底层slice
             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
@@ -246,9 +263,10 @@ def get_slice_topology(slice_obj):
                     host_status = 1
                 else:
                     host_status = 0
-                vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
-                            'hostid': vm.id, 'hostStatus': host_status}
-                normals.append(vm_info)
+                if vm.type == 1:
+                    vm_info = {'macAddress': vm.ip.ipaddr, 'switchDPID': virtual_switch.dpid,
+                                'hostid': vm.id, 'hostStatus': host_status}
+                    normals.append(vm_info)
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials}
     except Exception, ex:

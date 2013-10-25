@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 from django.dispatch import receiver
+from django.conf import settings
+from django.utils.translation import ugettext as _
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
 from slice.models import Slice
@@ -18,13 +20,23 @@ class Controller(ServiceResource):
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
 
+    def on_remove_from_slice(self, slice_obj):
+        self.slices.remove(slice_obj)
+
     def is_used(self):
         return self.slices.all().count() > 0
 
+    class Meta:
+        verbose_name = _("Controller")
+
 
 class Flowvisor(ServiceResource):
+
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
+
+    class Meta:
+        verbose_name = _("Flowvisor")
 
 
 class FlowSpaceRule(Resource):
@@ -52,13 +64,21 @@ class Link(models.Model):
     source = models.ForeignKey(SwitchPort, related_name="source_links")
     target = models.ForeignKey(SwitchPort, related_name="target_links")
 
+    class Meta:
+        verbose_name = _("Link")
+
 class FlowvisorLinksMd5(models.Model):
     md5 = models.CharField(max_length=32)
     flowvisor = models.OneToOneField(Flowvisor)
 
+    class Meta:
+        verbose_name = _("Flowvisor link md5")
+
 @transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
+    if settings.DEBUG:
+        return
     from communication.flowvisor_client import FlowvisorClient
 
     client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
@@ -96,8 +116,16 @@ def update_links(sender, instance, created, **kwargs):
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
-        source_switch = Switch.objects.get(dpid=link['src-switch'])
-        target_switch = Switch.objects.get(dpid=link['dst-switch'])
+        try:
+            source_switch = Switch.objects.get(dpid=link['src-switch'])
+        except Switch.DoesNotExist, e:
+            print '========== FETCHING ' + link['src-switch'] + " =========="
+            raise e
+        try:
+            target_switch = Switch.objects.get(dpid=link['dst-switch'])
+        except Switch.DoesNotExist, e:
+            print '========== FETCHING ' + link['dst-switch'] + " =========="
+            raise e
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:

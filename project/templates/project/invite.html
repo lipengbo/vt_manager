@@ -3,16 +3,21 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
+{% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
-{% block breadcrumb %}<a href="{% url "project_create" %}">创建项目</a><span class="divider">/</span><a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>成员邀请{% endblock %}
+{% block head_title %}成员邀请{% endblock %}
+{% block breadcrumb %}
+<a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
+成员邀请
+{% endblock %}
 
 {% block body %}
+{% paginate users %}
         <div class="fill_form">
-            <div class="search">                                                                   
+            <div class="search">
                 <form class="form-search">
                   <div class="input-append">
-                      <input type="text" name="query" value="{{ query }}" class="span2 search-query">
+                    <input type="text" name="query" value="{{ query }}" class="span2 search-query">
                     <button type="submit" class="btn">搜索</button>
                   </div>
                 </form>
@@ -21,7 +26,7 @@
         <form action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
             <fieldset>
-                 <legend>邀请成员<a data-toggle="modal" href="#inviteModal" class="btn btn-info edit">邀请</a></legend>
+                 <legend><a data-toggle="modal" href="#inviteModal" class="btn btn-info edit">邀请</a>邀请成员</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -30,7 +35,7 @@
                             <th width="35%">所属单位</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="checkboxs">
                         {% for user in users %}
                         <tr>
                             <td><input type="checkbox" name="user" value="{{ user.id }}" ></td>
@@ -41,22 +46,18 @@
                     </tbody>
                  </table>
               </fieldset>
-        </div>
+              {% if not users %}
+              <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+              {% endif %}
         <div class="pagination">
           <ul>
-            <li class="disabled"><a href="#">Prev</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
+              {% show_pages %}
           </ul>
         </div>
         <div class="form-actions">
           <div class="row-fluid">
             <div class="span4"></div>
-            <div class="span4"><button type="button" class="btn btn-info btn-large btn-block">返 回</button></div>
+            <div class="span4"><button type="button" onclick="window.history.back();" class="btn btn-info btn-large btn-block">返 回</button></div>
             <div class="span4"></div>
           </div>
         </div>
@@ -65,7 +66,7 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3 id="myModalLabel">邀请</h3>      
             </div>
-            <div class="modal-body">
+            <div class="modal-body base_info">
                   <table class="table">
                       <tbody>
                           <tr>

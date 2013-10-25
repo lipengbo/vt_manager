@@ -7,7 +7,7 @@
 import socket
 from etc import config
 from plugins.common import timer
-from plugins.common.agentclient import MonitorClient
+from plugins.common.agent_client import AgentClient
 from resources.models import Server
 from plugins.vt.models import DOMAIN_STATE_DIC as DOMAIN_STATE, HOST_STATE
 
@@ -32,7 +32,7 @@ class StateManager(object):
         for domain in server.virtualmachine_set.all():
             if domain.state in [DOMAIN_STATE['failed'], DOMAIN_STATE['building']]:
                 continue
-            domain.state = MonitorClient(host_ip).get_domain_state(domain.uuid)
+            domain.state = AgentClient(host_ip).get_domain_state(domain.uuid)
             domain.save()
 
     def __get_hosts_state(self):

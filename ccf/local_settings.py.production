@@ -1,0 +1,3 @@
+SITE_DOMAIN = 'localhost:8080'
+DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True

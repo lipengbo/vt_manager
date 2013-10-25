@@ -106,7 +106,6 @@ function isBlocked(i){
 		}	
 	}
 	return false;				
-	//alert(switches[key]);
 	//switchUsedNum[key] = 0;
 }
 
@@ -116,21 +115,22 @@ function drawTopology(slicec){
 		$("div#content").empty();
 	}
 	else{
-		if(slicec == 0){
-			$("div#content1").empty();
-		}else if(slicec == 1){
-			$("div#content2").empty();
-		}else if(slicec == 2){
-			$("div#content3").empty();
-		}else if(slicec == 3){
-			$("div#content4").empty();
-		}
+		$("div#content"+slicec).empty();
+		//if(slicec == 0){
+		//	$("div#content1").empty();
+		//}else if(slicec == 1){
+		//	$("div#content2").empty();
+		//}else if(slicec == 2){
+		//	$("div#content3").empty();
+		//}else if(slicec == 3){
+		//	$("div#content4").empty();
+		//}
 	}
 	var static_url = $("#STATIC_URL").text();	
 	var str = "";
-	if(slicec > -1){
-		str = str + "<a href=\"/slice_detail/" + slice_id + "/1/\">";
-	}	
+	//if(slicec > -1){
+	//	str = str + "<a href=\"/slice_detail/" + slice_id + "/1/\">";
+	//}	
 	str = str + "<svg id='svgc' width='100%' height='100%' version='1.1' xmlns='http://www.w3.org/2000/svg'>"
 		
 	for(var i = 0; i < links.length; i++){
@@ -186,11 +186,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts[i][6] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts[i][0] + "</title>  "
@@ -202,11 +202,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts_special.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts_special[i][4] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts_special[i][0] + "</title>  "
@@ -214,24 +214,25 @@ function drawTopology(slicec){
 	}
 	
 	str = str + "</svg>";
-	if(slicec > -1){
-		str = str + "</a>";
-	}
+	//if(slicec > -1){
+	//	str = str + "</a>";
+	//}
 		
 	//$("div#content").append(str);	
 	if(slicec == -1){
 		$("div#content").append(str);
 	}
 	else{
-		if(slicec == 0){
-			$("div#content1").append(str);
-		}else if(slicec == 1){
-			$("div#content2").append(str);
-		}else if(slicec == 2){
-			$("div#content3").append(str);
-		}else if(slicec == 3){
-			$("div#content4").append(str);
-		}
+		$("div#content"+slicec).append(str);
+		//if(slicec == 0){
+		//	$("div#content1").append(str);
+		//}else if(slicec == 1){
+		//	$("div#content2").append(str);
+		//}else if(slicec == 2){
+		//	$("div#content3").append(str);
+		//}else if(slicec == 3){
+		//	$("div#content4").append(str);
+		//}
 	}
 	
 }
@@ -362,8 +363,6 @@ function setLocation(){
 	
 	//计算树中每层的主机所占宽度，交换机所占宽度
 	for(var i = 0; i <= levelNum; i++){	
-		//alert("levelNodesNum[i]" + levelNodesNum[i])	
-		//alert("levelHostsNum[i]" + levelHostsNum[i])
 		if(levelNodesNum[i] == 0){
 			levelNodesWidth[i] = mbWidth / 1;
 		}else{
@@ -450,7 +449,6 @@ function findCircle(fatherObj){
 			}
 		}
 	}
-	
 	for(var i = 0; i < childSw.length; i++){
 		findCircle(childSw[i]);
 	}
@@ -532,12 +530,9 @@ function initLevelNodesNum(fatherObj, level){
 	var level_pre;
 	
 	for(var k = 0; k < host_links.length; k++){
-		//alert("hosts_special[k][3]"+hosts_special[k][3])
 		if(hosts_special[k][3] == 0){
 			num = host_links[k][1];
 			for(var l = 0; l < num; l++){
-				//alert("fatherObj[0]"+fatherObj[0])
-				//alert("host_links[k][l+3]"+host_links[k][l+3])
 				if(host_links[k][l+3] == fatherObj[0]){
 					if(host_links[k][2] < level){
 						HostNum++;
@@ -846,11 +841,11 @@ function initCircleTemp(){
 	hosts[11] = new Array("10","00:14",0, 0, 0, 0, 0)
 	hosts[12] = new Array("10","00:16",0, 0, 0, 0, 0)
 	
-	hosts_special[0] = new Array("08", 0, 0, 0, 1)
+	//hosts_special[0] = new Array("08", 0, 0, 0, 1)
 	//host_links[0] = new Array("08", 2, -1, "00:01", "00:02")
-	hosts_special[1] = new Array("09", 0, 0, 0, 0)
-	host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
-	host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
+	//hosts_special[1] = new Array("09", 0, 0, 0, 0)
+	//host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
+	//host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
 }
 
 //初始化画布，图标
@@ -862,10 +857,10 @@ function initCheckBoard(conti){
 		rs_pic_height = 30;
 	}
 	else{
-		rs_mbWidth = 320 * 0.9;
-		rs_mbHeight = 150;
-		rs_pic_width = 25;
-		rs_pic_height = 15;
+		rs_mbWidth = 480 * 0.9;
+		rs_mbHeight = 220;
+		rs_pic_width = 50;
+		rs_pic_height = 30;
 	}
 	mbWidth = rs_mbWidth;
 	mbHeight = rs_mbHeight;
@@ -894,9 +889,8 @@ var getDegrees = function(edges) {
     return degree;
 }
 
-function maxDegree (){
-    var degrees = getDegrees(links),
-        maxDegree = -1, max_idx = -1;
+function maxDegree (degrees){
+    var maxDegree = -1, max_idx = -1;
     for (var i in switches){
         if (sw_in_circle[i] != 1){
             dg = degrees[switches[i][0]] || 0;
@@ -911,59 +905,63 @@ function maxDegree (){
 
 //画一个slice的拓扑，参数conti表示对应的html页面中的div编号（-1对应slice编辑页面中的div）
 function draw(conti){
-	//alert("draw")
+	if(conti != -1){
+		slice_id = conti;
+	}
 	initCheckBoard(conti);	
 	init();
 	//initCircleTemp();
 	
 	//确定slice中有几棵树，每棵树的层数，宽度
-	for(var i=0; i<switches.length; i++){
-		if(sw_in_circle[i]==0){
-			currMaxLevelNodes = 1;
-			levelNum = 0;
-			
-			//设置树的根节点
-            i = maxDegree();
-			treeRootIndexs[treeNum] = i;
-			rootIndex = i;
-			setRootSwitch();
-			
-			//从根节点开始遍历交换机（广度优先遍历，破环)
-			findCircle(rootSw);
-			resetLinksSign();
-			
-			//获取树的层数	
-			getLevelNum(rootSw,0);
-			resetLinksSign();
-			if(maxTreeLevels <levelNum){
-				maxTreeLevels = levelNum;
-			}
-			treeLevels[treeNum]=levelNum;
-			
-			//获取树的宽度
-			levelNodesNum = null;
-			levelHostsNum = null;
-			levelNodesNum = new Array(0);
-			levelHostsNum = new Array(0);
-			for(var j=0; j<=levelNum; j++){
-				levelNodesNum[j] = 0;
-				levelHostsNum[j] = 0;
-			}
-			//一个主机连接不同树的多个交换机时，主机放在第一棵树上
-			for(var k = 0; k < host_links.length; k++){
-				if(host_links[k][2] != -1){
-					hosts_special[k][3] = 1;
-				}
-				host_links[k][2] = -1;
-			}
-			initLevelNodesNum(rootSw, 0);
-			resetLinksSign();
-			treeLevelNodes[treeNum]=currMaxLevelNodes;
-			
-			totalLevelNodes = totalLevelNodes + currMaxLevelNodes;
-			treeNum++;
-			currMaxLevelNodes = 0;
+	var degrees = getDegrees(links)
+	for(var s=0; s<switches.length; s++){
+		currMaxLevelNodes = 1;
+		levelNum = 0;
+		
+		//设置树的根节点
+        i = maxDegree(degrees);
+        if(i == -1){
+        	break;
+        }
+		treeRootIndexs[treeNum] = i;
+		rootIndex = i;
+		setRootSwitch();
+		
+		//从根节点开始遍历交换机（广度优先遍历，破环)
+		findCircle(rootSw);
+		resetLinksSign();
+		
+		//获取树的层数	
+		getLevelNum(rootSw,0);
+		resetLinksSign();
+		if(maxTreeLevels <levelNum){
+			maxTreeLevels = levelNum;
 		}
+		treeLevels[treeNum]=levelNum;
+		
+		//获取树的宽度
+		levelNodesNum = null;
+		levelHostsNum = null;
+		levelNodesNum = new Array(0);
+		levelHostsNum = new Array(0);
+		for(var j=0; j<=levelNum; j++){
+			levelNodesNum[j] = 0;
+			levelHostsNum[j] = 0;
+		}
+		//一个主机连接不同树的多个交换机时，主机放在第一棵树上
+		for(var k = 0; k < host_links.length; k++){
+			if(host_links[k][2] != -1){
+				hosts_special[k][3] = 1;
+			}
+			host_links[k][2] = -1;
+		}
+		initLevelNodesNum(rootSw, 0);
+		resetLinksSign();
+		treeLevelNodes[treeNum]=currMaxLevelNodes;
+		
+		totalLevelNodes = totalLevelNodes + currMaxLevelNodes;
+		treeNum++;
+		currMaxLevelNodes = 0;
 	}
 
 	if(totalLevelNodes == 0){
@@ -979,15 +977,12 @@ function draw(conti){
 	for(var k=0; k<hosts_special.length; k++){
 		hosts_special[k][3] = 0;
 		host_links[k][2] = -1;
-		//alert("for hosts_special[k][3]"+hosts_special[k][3]);
 	}
-	
 	//确定slice中的树的各元素坐标
 	for(var i=0; i<treeNum; i++){
 		rootIndex = treeRootIndexs[i];
 		setRootSwitch();
 		levelNum = treeLevels[i];
-		//alert("levelNum"+levelNum)
 		//确定当前树的画布位置
 		checkBoard(i);
 		//确定树中各元素坐标
@@ -1001,29 +996,26 @@ function draw(conti){
 $(document).ready(function() {
 	topology_type = $("#topology_type").text();
 	if(topology_type == 0){
-		var slice_num = $("#slice_num").text();
-		var slice_ids = new Array();
-		if(slice_num == 0){
-	
-		}else if(slice_num == 1){			
-			slice_ids[0] = $("#slice_id1").text();						
-		}else if(slice_num == 2){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-		}else if(slice_num == 3){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-			slice_ids[2] = $("#slice_id3").text();
-		}else if(slice_num == 4){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-			slice_ids[2] = $("#slice_id3").text();
-			slice_ids[3] = $("#slice_id4").text();		
-		}		
-		for(var i = 0; i < slice_num; i++){			
-			slice_id = slice_ids[i];
-			draw(i);
-		}
+		//var slice_num = $("#slice_num").text();
+		//var slice_ids = new Array();
+		//if(slice_num == 0){
+	//
+		//}else if(slice_num == 1){			
+		//	slice_ids[0] = $("#slice_id1").text();						
+		//}else if(slice_num == 2){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//}else if(slice_num == 3){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//	slice_ids[2] = $("#slice_id3").text();
+		//}else if(slice_num == 4){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//	slice_ids[2] = $("#slice_id3").text();
+		//	slice_ids[3] = $("#slice_id4").text();		
+		//}	
+		home_show_slice();
 	}
 	else{
 		slice_id = $("#slice_id").text();
@@ -1038,4 +1030,73 @@ function f(){
 		draw();
 		rootIndex++;
 	}	
+}
+
+
+//首页slice拓扑展示
+function home_show_slice(){
+	check_url = "http://" + window.location.host + "/slice/get_show_slices/";
+	var str;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+        	slices = data.slices;
+        	if(slices && slices.length>0){
+        		//alert(1);
+        		$("div#slice_show").empty();
+				str = "";
+				str = str + "<div class=\"dg-wrapper\">";
+    			for(var i=0;i<slices.length;i++){
+					str = str + "<a href=\"#\">"
+						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:260px; top:41px\" alt=\"image"+i+"\">"
+						+ "</div>"
+						+ "<div>"+slices[i].name+"拓扑图</div>"
+						+ "</a>";
+				}
+				if(slices.length==1){
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+				}
+				if(slices.length==2){
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+				}
+				str = str + "</div>"
+					+ "<nav>"	
+					+ "<span class=\"dg-prev\">&lt;</span>"
+					+ "<span class=\"dg-next\">&gt;</span>"
+					+ "</nav>";
+				$("div#slice_show").append(str);
+				
+				//画拓扑
+				for(var i=0;i<slices.length;i++){
+					draw(slices[i].id);
+				}		
+        	}
+        	else{
+        		//alert(2);
+        		$("div#slice_show").empty();
+        		str = "";
+				str = str + "<div class=\"dg-wrapper\">";
+        		str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "</div>"
+					+ "<nav>"	
+					+ "<span class=\"dg-prev\">&lt;</span>"
+					+ "<span class=\"dg-next\">&gt;</span>"
+					+ "</nav>";
+				$("div#slice_show").append(str);
+        	}
+        }
+    });
 }

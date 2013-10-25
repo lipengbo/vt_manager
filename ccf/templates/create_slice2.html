@@ -8,20 +8,19 @@
 {% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span>创建Slice{% endblock %}
 
 {% block body %}
-	<div class="help_doc">
-		<div class="help_main fill_form form-wizard">
+		<div class=" fill_form form-wizard">
 			<ul class="row-fluid nav nav-pills">
 				<li class="span1"></li>
-				<li class="span2">
+				<li class="span2 visit">
 					<a href="javascript:void(0);" class="step">
 						<span class="number">1</span>
 						<span class="desc">基本信息</span>   
 					</a>
 				</li>
-				<li class="span2 active">
+				<li class="span2 visit">
 					<a href="javascript:void(0);" class="step">
 						<span class="number">2</span>
-						<span class="desc">网络配置</span>   
+						<span class="desc active">网络配置</span>   
 					</a>
 				</li>
 				<li class="span2">
@@ -46,30 +45,71 @@
 			</ul>
 		  <form>
 			  <fieldset>
-			    <legend>基本信息</legend>
-			    <label>名称</label>
-			    <input type="text">
-			    <label>描述</label>
-			    <textarea rows="8"></textarea>		     
+			    <legend>Slice网络节点选择</legend>
+			    <div class="alert alert-info">
+	              <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
+	            </div>
+	            <div class="show_frame">
+	              <div class="frame_tip">
+	              	<span class="label label-important">网络出口节点</span>
+	            	<span class="label label-info">普通交换节点</span>
+	            	<span class="label label-success">虚拟机关联节点</span>
+	              </div>
+	              <div class="main_frame"></div>
+	              <table class="table table-bordered table-striped table-hover">
+				  	<thead>
+				  		<tr>
+				  			<th>序号</th>
+				  			<th>DPID</th>
+				  			<th>网络节点类型</th>
+				  			<th>端口</th>
+				  		</tr>
+				  	</thead>
+				  	<tbody>
+				  		<tr>
+				  			<td>A</td>
+				  			<td>00:00:00:00:00:00:01</td>
+				  			<td>网络出口节点</td>
+				  			<td>A-1<------->B-1，A-2<--------->C-1</td>
+				  		</tr>
+				  		<tr>
+				  			<td>A</td>
+				  			<td>00:00:00:00:00:00:01</td>
+				  			<td>网络出口节点</td>
+				  			<td>A-1<------->B-1，A-2<--------->C-1</td>
+				  		</tr>
+				  		<tr>
+				  			<td>A</td>
+				  			<td>00:00:00:00:00:00:01</td>
+				  			<td>网络出口节点</td>
+				  			<td>A-1<------->B-1，A-2<--------->C-1</td>
+				  		</tr>
+				  	</tbody>
+				  </table>            	
+	            </div>	     
 			  </fieldset>
 			  <fieldset>
-			  	 <legend>Slice节点 </legend>
-			  	 <label>选择节点</label>
+			  	 <legend>Slice网络地址</legend>
+			  	 <label>IP数量</label>
 			    <select>
-				  <option>无线谷</option>
-				  <option>北邮</option>
-				  <option>翠屏</option>
+				  <option>4</option>
+				  <option>8</option>
+				  <option>16</option>
+				  <option>32</option>
+				  <option>64</option>
 				</select>	
+				<span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
 			  </fieldset>
-			  <div class="row-fluid">
-			  	<div class="span3"></div>
-			  	<div class="span3"><button type="submit" class="btn btn-large btn-block">返 回</button></div>
-			  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">下一步</button></div>
-			  	<div class="span3"></div>
+			  <div class="form-actions">
+				  <div class="row-fluid">
+				  	<div class="span3"></div>
+				  	<div class="span3"><button type="submit" class="btn btn-large btn-block">上一步</button></div>
+				  	<div class="span3"><button type="submit" class="btn btn-large btn-block btn-info">下一步</button></div>
+				  	<div class="span3"></div>
+				  </div>
 			  </div>
 			</form>
 		</div>
-	</div>
 {% endblock %}
 {% block extra_script %}
 {% endblock %}

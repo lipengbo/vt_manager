@@ -64,12 +64,19 @@ class Invitation(Connection):
         body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         send_mail(_("You have an invitation"), body, settings.FROM_EMAIL, [self.to_user.email])
 
+
+    class Meta:
+        verbose_name = _("Invitation")
+
 class Application(Connection):
 
     def accept(self):
         self.target.accept(self.from_user)
         self.accepted = True
         self.save()
+
+    def deny(self):
+        self.delete()
 
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
@@ -80,6 +87,9 @@ class Application(Connection):
         body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         send_mail(_("You have an application"), body, settings.FROM_EMAIL, [self.to_user.email])
 
+    class Meta:
+        verbose_name = _("Application")
+
 @receiver(pre_save, sender=Invitation)
 @receiver(pre_save, sender=Application)
 def generate_key(sender, instance, **kwargs):
@@ -88,6 +98,7 @@ def generate_key(sender, instance, **kwargs):
         instance.key = md5("{}{}{}{}".format(instance.from_user.id, 
             instance.to_user.id,
             instance.target_id, salt)).hexdigest()
+
 
 @receiver(post_save, sender=Invitation)
 @receiver(post_save, sender=Application)

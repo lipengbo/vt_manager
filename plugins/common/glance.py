@@ -19,5 +19,5 @@ def get_image_list():
     images = "images=" + images
     exec(images)
     for image in images['images']:
-        download_url = glance_url + '/image/' + image['id']
+        download_url = glance_url + '/images/' + image['id']
         yield image['id'], image['name'], download_url

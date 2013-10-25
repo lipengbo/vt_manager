@@ -14,11 +14,23 @@ ADMINS = [
 MANAGERS = ADMINS
 
 DATABASES = {
-    "default": {
+    'default': {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "../ccf/dev.db",
+        "NAME": "dev.db",
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'ceni',  
+#         'USER': 'root',  
+#         'PASSWORD': 'cdn%nf',  
+#         'HOST': '192.168.5.120',  
+#         'PORT': '3306',  
+#     }
+# }
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -76,6 +88,8 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+
+LOCALE_PATHS = [os.path.join(PROJECT_ROOT, 'i18n', app, 'locale') for app in os.listdir(os.path.join(PROJECT_ROOT,'i18n'))]
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "2d3di+cxe4f1gh5cewjlpj&amp;qwr^6xi3d91p!blkhz3rl&amp;8hvpx"
@@ -138,6 +152,7 @@ INSTALLED_APPS = [
     "account",
     "metron",
     "eventlog",
+    "endless_pagination",
 
     # project
     "ccf",
@@ -151,6 +166,7 @@ INSTALLED_APPS = [
     "invite",
 ]
 
+CRON_POLLING_FREQUENCY = 5
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -179,7 +195,7 @@ LOGGING = {
         'ceni_debug': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': PROJECT_ROOT + '/logs/ceni_vt_manager.log',
+            'filename': PROJECT_ROOT + '/logs/ceni_debug.log',
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -202,11 +218,6 @@ LOGGING = {
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
-            "propagate": True,
-        },
-        "vt_manager": {
-            "handlers": ["console", "ceni_debug"],
-            "level": "DEBUG",
             "propagate": True,
         },
         "plugins": {

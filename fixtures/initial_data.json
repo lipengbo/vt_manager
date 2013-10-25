@@ -2,7 +2,7 @@
     {
         "fields": {
             "domain": "localhost:8000", 
-            "name": "example.com [localhost]"
+            "name": "ccf"
         }, 
         "model": "sites.site", 
         "pk": 1
@@ -90,5 +90,21 @@
         }, 
         "model": "vt.flavor", 
         "pk": 6
+    },
+    {
+        "pk": 1, 
+        "model": "project.category",
+        "fields": {
+            "image": "img/cat_sdn.png",
+            "name": "SDN"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "project.category",
+        "fields": {
+            "image": "img/cat_cloud.png",
+            "name": "\u4e91\u8ba1\u7b97"
+        }
     }
 ]

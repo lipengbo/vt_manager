@@ -9,32 +9,34 @@ admin.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 
-#from xadmin.plugins import xversion #xversion.registe_models()
+#from xadmin.plugins import xversion
+#xversion.registe_models()
 
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
-    url(r"^login/", TemplateView.as_view(template_name="login.html"), name="home"),
-    url(r"^help/", TemplateView.as_view(template_name="help.html"), name="home"),
-    url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="home"),
-    url(r"^detail_project/", TemplateView.as_view(template_name="detail_project.html"), name="home"),
-    url(r"^create_slice1/", TemplateView.as_view(template_name="create_slice1.html"), name="home"),
-    url(r"^create_slice2/", TemplateView.as_view(template_name="create_slice2.html"), name="home"),
-    url(r"^create_slice3/", TemplateView.as_view(template_name="create_slice3.html"), name="home"),
-    url(r"^create_slice4/", TemplateView.as_view(template_name="create_slice4.html"), name="home"),
-    url(r"^create_slice5/", TemplateView.as_view(template_name="create_slice5.html"), name="home"),
-    url(r"^detail_slice/", TemplateView.as_view(template_name="detail_slice.html"), name="home"),
-    url(r"^create_slice/", TemplateView.as_view(template_name="create_slice.html"), name="home"),
-    url(r"^project_manage/", TemplateView.as_view(template_name="project_manage.html"), name="project_manage"),
-    url(r"^list_project/", TemplateView.as_view(template_name="list_project.html"), name="home"),
-    url(r"^list_slice/", TemplateView.as_view(template_name="list_slice.html"), name="home"),
-    url(r"^list_vm/", TemplateView.as_view(template_name="list_vm.html"), name="home"),
-    url(r"^apply_project/", TemplateView.as_view(template_name="apply_project.html"), name="home"),
-    url(r"^homepage/", TemplateView.as_view(template_name="homepage.html"), name="home"),
-    url(r"^logs/", TemplateView.as_view(template_name="logs.html"), name="home"),
-    url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="home"),
-    url(r"^member_check/", TemplateView.as_view(template_name="member_check.html"), name="home"),
-    url(r"^invite_member/", TemplateView.as_view(template_name="invite_member.html"), name="home"),
+    url(r"^login/", TemplateView.as_view(template_name="login.html"), name="demo"),
+    url(r"^help/", TemplateView.as_view(template_name="help.html"), name="demo"),
+    url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="demo"),
+    url(r"^detail_project/", TemplateView.as_view(template_name="detail_project.html"), name="demo"),
+    url(r"^create_slice1/", TemplateView.as_view(template_name="create_slice1.html"), name="demo"),
+    url(r"^create_slice2/", TemplateView.as_view(template_name="create_slice2.html"), name="demo"),
+    url(r"^create_slice3/", TemplateView.as_view(template_name="create_slice3.html"), name="demo"),
+    url(r"^create_slice4/", TemplateView.as_view(template_name="create_slice4.html"), name="demo"),
+    url(r"^create_slice5/", TemplateView.as_view(template_name="create_slice5.html"), name="demo"),
+    url(r"^detail_slice/", TemplateView.as_view(template_name="detail_slice.html"), name="demo"),
+    url(r"^create_slice/", TemplateView.as_view(template_name="create_slice.html"), name="demo"),
+    url(r"^project_manage/", TemplateView.as_view(template_name="project_manage.html"), name="proje_manage"),
+    url(r"^list_project/", TemplateView.as_view(template_name="list_project.html"), name="demo"),
+    url(r"^list_slice/", TemplateView.as_view(template_name="list_slice.html"), name="demo"),
+    url(r"^list_vm/", TemplateView.as_view(template_name="list_vm.html"), name="demo"),
+    url(r"^apply_project/", TemplateView.as_view(template_name="apply_project.html"), name="demo"),
+    url(r"^homepage/", TemplateView.as_view(template_name="homepage.html"), name="demo"),
+    url(r"^logs/", TemplateView.as_view(template_name="logs.html"), name="demo"),
+    url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="demo"),
+    url(r"^member_check/", TemplateView.as_view(template_name="member_check.html"), name="demo"),
+    url(r"^invite_member/", TemplateView.as_view(template_name="invite_member.html"), name="demo"),
 
+    url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
 
@@ -58,7 +60,7 @@ urlpatterns = patterns("",
     url(r"^plugins/vt/", include("plugins.vt.urls")),
     url(r"^invite/", include("invite.urls")),
     url(r"^admin/", include(admin.site.urls)),
-#    url(r'^xadmin/', include(xadmin.site.urls)),
+    #url(r'^admin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
 )
 
