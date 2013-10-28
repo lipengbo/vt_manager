@@ -16,19 +16,19 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "dev.db",
+        "NAME": "../ccf/dev.db",
     }
 }
 
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'ceni',  
-#         'USER': 'root',  
-#         'PASSWORD': 'cdn%nf',  
-#         'HOST': '192.168.5.120',  
-#         'PORT': '3306',  
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ceni',
+#         'USER': 'root',
+#         'PASSWORD': 'cdn%nf',
+#         'HOST': '192.168.5.120',
+#         'PORT': '3306',
 #     }
 # }
 
