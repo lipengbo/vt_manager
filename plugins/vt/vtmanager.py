@@ -6,7 +6,9 @@
 # E-mail:lipengbo10054444@gmail.com
 from plugins.common.agent_client import AgentClient
 from resources.models import Server
+from plugins.vt.models import VirtualMachine
 from etc import config
+import json
 
 
 class Filter(object):
@@ -18,19 +20,19 @@ class Filter(object):
 
     def check_resource_by_monitor(self, hostid, hostip):
         client = AgentClient(hostip)
-        host_status = client.get_host_status()
+        host_status = json.loads(client.get_host_status())
         if config.unique_hosts_per_alloc <= client.get_instances_count():
             return False
         if self.vcpu > int(client.get_host_info()['vcpus']):
             return False
-        if config.max_cpu < float(host_status['cpu_percent']):
+        if config.max_cpu < float(host_status['cpu']):
             return False
-        mem_free = float(host_status['mem']['free'])
-        mem_total = float(host_status['mem']['total'])
-        if config.max_mem < (mem_total - mem_free - self.mem) / mem_total:
+        mem_free = float(host_status['mem'][4])
+        mem_total = float(host_status['mem'][0])
+        if config.max_mem < (mem_total - mem_free - (self.mem << 20)) * 100 / mem_total:
             return False
-        disk_free = float(host_status['disk_free'])
-        if config.max_disk > disk_free - self.disk:
+        disk_free = int(host_status['disk'].items()[0][1][2])
+        if config.max_disk > (disk_free >> 30) - self.disk:
             return False
         return hostid
 
@@ -63,3 +65,11 @@ class VTManager(xmlrpc.XMLRPC):
         print 'hostlist=%s' % hostlist
         print '--------------------schedul------------------------------'
         return Filter(vcpu, mem, disk).filter(hostlist)
+
+    def xmlrpc_set_domain_state(self, vname, state):
+        try:
+            VirtualMachine.objects.filter(uuid=vname).update(state=state)
+        except:
+            pass
+        finally:
+            return True
