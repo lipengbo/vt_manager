@@ -21,19 +21,20 @@ class Filter(object):
     def check_resource_by_monitor(self, hostid, hostip):
         client = AgentClient(hostip)
         host_status = json.loads(client.get_host_status())
-        if config.unique_hosts_per_alloc <= client.get_instances_count():
-            return False
-        if self.vcpu > int(client.get_host_info()['vcpus']):
-            return False
-        if config.max_cpu < float(host_status['cpu']):
-            return False
-        mem_free = float(host_status['mem'][4])
-        mem_total = float(host_status['mem'][0])
-        if config.max_mem < (mem_total - mem_free - (self.mem << 20)) * 100 / mem_total:
-            return False
-        disk_free = int(host_status['disk'].items()[0][1][2])
-        if config.max_disk > (disk_free >> 30) - self.disk:
-            return False
+        if not config.function_test:
+            if config.unique_hosts_per_alloc <= client.get_instances_count():
+                return False
+            if self.vcpu > int(client.get_host_info()['vcpus']):
+                return False
+            if config.max_cpu < float(host_status['cpu']):
+                return False
+            mem_free = float(host_status['mem'][4])
+            mem_total = float(host_status['mem'][0])
+            if config.max_mem < (mem_total - mem_free - (self.mem << 20)) * 100 / mem_total:
+                return False
+            disk_free = int(host_status['disk'].items()[0][1][2])
+            if config.max_disk > (disk_free >> 30) - self.disk:
+                return False
         return hostid
 
     def filter(self, host_list):
