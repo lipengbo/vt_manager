@@ -41,5 +41,5 @@ def start_statemanager():
 
 
 if __name__ == "__main__":
-    start_statemanager()
+    #start_statemanager()
     start_service()
